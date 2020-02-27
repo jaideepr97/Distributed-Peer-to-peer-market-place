@@ -1,3 +1,4 @@
+package main.java;
 public interface P2PInterface {
 
     /** This method would search the network for the buyers
