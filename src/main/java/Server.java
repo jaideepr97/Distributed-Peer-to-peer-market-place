@@ -1,4 +1,4 @@
-package main.java;
+//package main.java;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -10,8 +10,9 @@ import java.net.Socket;
 public class Server implements Runnable
 {
     int port;
+    int peerID;
     int productToSell;
-    int productToSellQuantity;
+    int sellQuantity;
     ServerSocket serverSocket ;
     Socket clientSocket ;
     BufferedReader bufferedReader ;
@@ -22,9 +23,12 @@ public class Server implements Runnable
     {
         running = true;
     }
-    public Server(int _port)
+    public Server(int _port, int _peerID, int _productToSell, int _sellQuantity)
     {
         this.port = _port;
+        this.peerID = _peerID;
+        this.productToSell = _productToSell;
+        this.sellQuantity = _sellQuantity;
         running = true;
     }
 

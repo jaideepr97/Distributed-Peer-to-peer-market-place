@@ -1,4 +1,4 @@
-package main.java;
+//package main.java;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -60,7 +60,6 @@ public class Client implements Runnable
         while(running) {
             try
             {
-
                     counter++;
 //                    System.out.println(counter);
                     this.getSocket();
@@ -70,8 +69,8 @@ public class Client implements Runnable
                     } catch (IOException e) {
                         System.out.println("Client: IOException\n");
                     }
-                    if (counter > 100)
-                        this.stopThread();
+//                    if (counter > 100)
+//                        this.stopThread();
 
             }
             catch (Exception e)
