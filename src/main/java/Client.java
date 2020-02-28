@@ -6,9 +6,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
-class Client implements Runnable
+public class Client implements Runnable
 {
     private int port = 5000;
+    private int peerId;
     private Socket clientSocket;
     DataOutputStream clientOutputStream;
     BufferedReader bufferedReader;
@@ -19,11 +20,16 @@ class Client implements Runnable
         running = true;
         message = "";
     }
-    public Client(int _port)
+    public Client(int _port, int peerId)
     {
         this.port = _port;
+        this.peerId = peerId;
         running = true;
+    }
 
+    public void stopThread()
+    {
+        running = false;
     }
     public void setMessage(String m)
     {
@@ -50,22 +56,30 @@ class Client implements Runnable
 
     @Override
     public void run() {
+        int counter = 0;
+        while(running) {
+            try
+            {
 
-        try
-        {
-            this.getSocket();
-            try{
-                clientOutputStream.writeBytes(this.message+"\n");
-            }
-            catch (IOException e){
-                System.out.println("Client: IOException\n");
-            }
+                    counter++;
+//                    System.out.println(counter);
+                    this.getSocket();
+                    this.setMessage("Client with id" + this.peerId + " says hi");
+                    try {
+                        clientOutputStream.writeBytes(this.message + "\n");
+                    } catch (IOException e) {
+                        System.out.println("Client: IOException\n");
+                    }
+                    if (counter > 100)
+                        this.stopThread();
 
+            }
+            catch (Exception e)
+            {
+                System.out.println("Client: Exception in run():"+e.getStackTrace()+"\n");
+            }
         }
-        catch (Exception e)
-        {
-            System.out.println("Client: Exception in run():"+e.getStackTrace()+"\n");
-        }
+//        }
 
 
     }

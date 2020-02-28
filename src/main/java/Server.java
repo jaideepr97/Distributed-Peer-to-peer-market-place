@@ -7,9 +7,11 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-class Server implements Runnable
+public class Server implements Runnable
 {
-    int port = 5000;
+    int port;
+    int productToSell;
+    int productToSellQuantity;
     ServerSocket serverSocket ;
     Socket clientSocket ;
     BufferedReader bufferedReader ;
@@ -25,6 +27,8 @@ class Server implements Runnable
         this.port = _port;
         running = true;
     }
+
+
     public void stopThread()
     {
         running = false;
@@ -50,10 +54,11 @@ class Server implements Runnable
         clientSocket = serverSocket.accept();
         outputStream = new DataOutputStream(clientSocket.getOutputStream());
         bufferedReader = null;
-        try
+        while(running)
         {
-            while(running)
+            try
             {
+
                 bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 String data = null;
                 data = bufferedReader.readLine();
@@ -62,17 +67,20 @@ class Server implements Runnable
                     //Check if the current server has items
                     System.out.println("Received:"+ data +"\n");
                 }
+//                this.stopThread();
+            }
+
+            catch (IOException e)
+            {
+            System.out.println("(listen): Master Heartbeat for worker" + 0 + "IO exception\n");
             }
         }
-        catch (IOException e)
-        {
-            System.out.println("(listen): Master Heartbeat for worker" + 0 + "IO exception\n");
-        }
-        finally {
+
+//        finally {
             serverSocket.close();
             clientSocket.close();
             bufferedReader.close();
-        }
+//        }
     }
 
     public void run(){
