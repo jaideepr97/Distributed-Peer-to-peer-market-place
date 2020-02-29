@@ -72,7 +72,7 @@ public class Utilities {
         // print your generated json
         try
         {
-            FileWriter f = new FileWriter("config.txt");
+            FileWriter f = new FileWriter("StarTopologySixNodesConfig.txt");
             f.write(jsonString);
             f.close();
         }
