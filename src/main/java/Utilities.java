@@ -10,7 +10,8 @@ import java.util.List;
 public class Utilities {
 
     public static void main(String[] args) {
-        populateStarTopologyConfig();
+//        populateStarTopologyConfig();
+        populateTestTopologyConfig();
     }
 
     public static void populateStarTopologyConfig()

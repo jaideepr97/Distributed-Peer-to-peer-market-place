@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentMap;
 public class PeerNode {
 //    private static final String CONFIG_FILE_LOCATION = "/Users/aayushgupta/IdeaProjects/lab-1-rao-gupta/";
     private static final String CONFIG_FILE_LOCATION = "/home/hadoopuser/Desktop/lab-1-rao-gupta/";
-    private static final String FILENAME = "StarTopologySixNodesConfig.txt";
+    private static final String FILENAME = "TestTopologySixNodesConfig.txt";
 
 
     private static Config config;
@@ -47,7 +47,7 @@ public class PeerNode {
         getConfig();
         System.out.println("Setting Seller details for peerID:"+peerID+"\n");
         getSellDetails();
-//        getBuyDetails();
+
         if(config == null)
         {
             System.out.println("Error: Config file not found!! for peerID:"+peerID+"\n");
@@ -184,13 +184,14 @@ class LookupRequestGenerator implements Runnable {
     @Override
     public void run() {
         Random r = new Random();
+        int counter = 0;
         while(running) {
             int timeToSleep =  r.nextInt((7 - 5) + 1) + 5;
             try {
                 Thread.sleep(timeToSleep*1000);
                 int productId = PeerNode.getBuyDetails();
                 Message newLookupRequest = new Message();
-
+                counter ++;
                 PeerNode.requestId += 1;
                 System.out.println("New request with ID:"+PeerNode.requestId+" for peerID:"+PeerNode.peerID+"\n");
                 newLookupRequest.setRequestId(PeerNode.requestId);
@@ -199,6 +200,12 @@ class LookupRequestGenerator implements Runnable {
                 newLookupRequest.setProductId(productId);
                 newLookupRequest.setType(0);
                 System.out.println("Adding request with ID:"+PeerNode.requestId+" to the sharedRequestBuffer for peerID:"+PeerNode.peerID+"\n");
+
+                System.out.println("-----------------------------");
+                System.out.println("\nMessage created by peer with peer id \n" + PeerNode.peerID);
+                System.out.println(Message.serializeMessage(newLookupRequest));
+                System.out.println("\n");
+
                 synchronized (PeerNode.sharedRequestBuffer)
                 {
                     PeerNode.sharedRequestBuffer.offer(newLookupRequest);
@@ -209,6 +216,9 @@ class LookupRequestGenerator implements Runnable {
                 System.out.println(e.getMessage());
                 stopThread();
             }
+            if(counter == 10)
+                stopThread();
+
 
         }
     }

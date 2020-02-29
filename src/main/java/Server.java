@@ -66,12 +66,19 @@ public class Server implements Runnable
                 bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 String data = null;
                 data = bufferedReader.readLine();
+//                if(data == null)
+//                    System.out.println("DATA IS NULLL!!!!!!!!!!!!!!!!!!!");
                 if(data != null)
                 {
                     System.out.println("Server:"+peerID+", Data Received!\n");
                     Message message = Message.deserializeMessage(data);
-                    if(PeerNode.requestHistory.keySet().contains(message)) {
+                    if(PeerNode.requestHistory.keySet().contains(message) ) {
                         System.out.println("Server:"+peerID+", Request already present\n");
+                        continue;
+                    }
+
+                    if(message.getHopCount() < 1) {
+                        System.out.println("Server:"+peerID+", Hops exhausted for this message\n");
                         continue;
                     }
                     switch(message.getType()) {
