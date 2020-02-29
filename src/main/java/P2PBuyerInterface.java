@@ -12,7 +12,10 @@ public interface P2PBuyerInterface {
      * @param sellerID - Contains the ID of the seller
      */
     public void buy(int sellerID);
-
+    /**
+     * This method will be used by the sellers to respond to a buy request
+     * @param sellerID - Contains the ID of the seller
+     */
     public void reply(int sellerID);
 
 }

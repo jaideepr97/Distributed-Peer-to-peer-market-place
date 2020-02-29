@@ -16,6 +16,7 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
 
 public class PeerNode {
@@ -33,9 +34,10 @@ public class PeerNode {
     static int numberOfItems;
     static int productToBuy;
     static boolean running = true;
-    public static ConcurrentHashMap<Message, Integer> sharedRequestBuffer = new ConcurrentHashMap();
+    public static ConcurrentLinkedQueue<Message> sharedRequestBuffer = new ConcurrentLinkedQueue<>();
     public static ConcurrentHashMap<Message, Integer> requestHistory = new ConcurrentHashMap();
-    public static ConcurrentHashMap<Message, Integer> sharedReplyBuffer = new ConcurrentHashMap();
+    public static ConcurrentLinkedQueue<Message> sharedReplyBuffer = new ConcurrentLinkedQueue<>();
+    public static ConcurrentLinkedQueue<Message> sharedTransactionBuffer = new ConcurrentLinkedQueue<>();
 
 
     public static void main(String[] args)  {
@@ -63,19 +65,30 @@ public class PeerNode {
         lookupRequestGeneratorThread.start();
 
         while(running) {
-            if(sharedRequestBuffer.size() >  0) {
-                for(Message m: sharedRequestBuffer.keySet()) {
-                    for(int i=0; i<config.getNeighborIDs().size(); i++) {
+            synchronized (sharedRequestBuffer) {
+                if (sharedRequestBuffer.size() > 0) {
+                    Message m = sharedRequestBuffer.poll();
+                    for (int i = 0; i < config.getNeighborIDs().size(); i++) {
                         Client client = new Client(config.getNeighborPorts().get(i), peerID, m);
                         Thread clientThread = new Thread(client);
                         clientThread.start();
                     }
                 }
             }
-
-            if(sharedReplyBuffer.size() > 0) {
-                for(Message m: sharedReplyBuffer.keySet()) {
-                    int destinationPeerId = m.messagePath.get(m.messagePath.size() -1);
+            synchronized (sharedReplyBuffer) {
+                if (sharedReplyBuffer.size() > 0) {
+                    Message m = sharedReplyBuffer.poll();
+                    int destinationPeerId = m.messagePath.get(m.messagePath.size() - 1);
+                    Client client = new Client(config.getPortMap().get(destinationPeerId), peerID, m);
+                    Thread clientThread = new Thread(client);
+                    clientThread.start();
+                }
+            }
+            synchronized (sharedTransactionBuffer)
+            {
+                if (sharedTransactionBuffer.size() > 0) {
+                    Message m = sharedTransactionBuffer.poll();
+                    int destinationPeerId = m.getDestinationSellerId();
                     Client client = new Client(config.getPortMap().get(destinationPeerId), peerID, m);
                     Thread clientThread = new Thread(client);
                     clientThread.start();
@@ -156,8 +169,10 @@ class LookupRequestGenerator implements Runnable {
                 newLookupRequest.setSourcePeerId(PeerNode.peerID);
                 newLookupRequest.setProductId(productId);
                 newLookupRequest.setType(0);
-
-                PeerNode.sharedRequestBuffer.put(newLookupRequest, 0);
+                synchronized (PeerNode.sharedRequestBuffer)
+                {
+                    PeerNode.sharedRequestBuffer.offer(newLookupRequest);
+                }
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
