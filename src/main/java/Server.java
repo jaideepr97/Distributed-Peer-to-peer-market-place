@@ -55,19 +55,18 @@ public class Server implements Runnable
     public void listen() throws IOException
     {
         serverSocket = new ServerSocket(port);
-        clientSocket = serverSocket.accept();
-        outputStream = new DataOutputStream(clientSocket.getOutputStream());
-        bufferedReader = null;
+
         while(running)
         {
             try
             {
+                clientSocket = serverSocket.accept();
+                outputStream = new DataOutputStream(clientSocket.getOutputStream());
+                bufferedReader = null;
                 System.out.println("Server:"+peerID+", Listening........\n");
                 bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 String data = null;
                 data = bufferedReader.readLine();
-//                if(data == null)
-//                    System.out.println("DATA IS NULLL!!!!!!!!!!!!!!!!!!!");
                 if(data != null)
                 {
                     System.out.println("Server:"+peerID+", Data Received!\n");
