@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server implements Runnable
+public class Server implements Runnable, P2PSellerInterface
 {
     int port;
     int peerID;
@@ -100,4 +100,11 @@ public class Server implements Runnable
         }
 
     }
+
+
+    @Override
+    public void reply(String sellerID) {
+
+    }
+
 }

@@ -3,7 +3,7 @@ import java.util.List;
 
 public class Message {
     private String productName;
-    private String productId;
+    private int productId;
     public List<Integer> messagePath;
     private int hopCount;
     private int type;
@@ -12,7 +12,7 @@ public class Message {
 
     public Message(){
         this.productName = "";
-        this.productId = "";
+        this.productId = -1;
         this.hopCount = 0;
         this.type = 0;
         this.messagePath = new ArrayList<>();
@@ -21,7 +21,7 @@ public class Message {
 
     }
 
-    public String getProductId() {
+    public int getProductId() {
         return productId;
     }
 
@@ -49,7 +49,7 @@ public class Message {
         this.hopCount = hopCount;
     }
 
-    public void setProductId(String productId) {
+    public void setProductId(int productId) {
         this.productId = productId;
     }
 
@@ -61,7 +61,7 @@ public class Message {
         this.productName = productName;
     }
 
-    public void setId(int requestId) {
+    public void setRequestId(int requestId) {
         this.requestId = requestId;
     }
 
@@ -80,7 +80,7 @@ public class Message {
                     this.productName.equals(message.getProductName()) &&
                     this.sourcePeerId == message.getSourcePeerId() &&
                     this.requestId == message.getRequestId() &&
-                    this.productId.equals(message.getProductId())) {
+                    this.productId == message.getProductId()) {
                 result = true;
             }
         }

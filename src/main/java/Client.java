@@ -6,24 +6,24 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
-public class Client implements Runnable
+public class Client implements Runnable, P2PBuyerInterface
 {
-    private int port = 5000;
+    private int port;
     private int peerId;
     private Socket clientSocket;
     DataOutputStream clientOutputStream;
     BufferedReader bufferedReader;
     volatile boolean running;
-    String message;
+    Message message;
     public Client()
     {
         running = true;
-        message = "";
     }
-    public Client(int _port, int peerId)
+    public Client(int _port, int peerId, Message message)
     {
         this.port = _port;
         this.peerId = peerId;
+        this.message = message;
         running = true;
     }
 
@@ -31,10 +31,7 @@ public class Client implements Runnable
     {
         running = false;
     }
-    public void setMessage(String m)
-    {
-        this.message = m;
-    }
+
     public void getSocket() throws IOException
     {
         clientSocket = new Socket("localhost", this.port);
@@ -56,22 +53,16 @@ public class Client implements Runnable
 
     @Override
     public void run() {
-        int counter = 0;
+//        int counter = 0;
         while(running) {
             try
             {
-                    counter++;
-//                    System.out.println(counter);
                     this.getSocket();
-                    this.setMessage("Client with id" + this.peerId + " says hi");
                     try {
                         clientOutputStream.writeBytes(this.message + "\n");
                     } catch (IOException e) {
                         System.out.println("Client: IOException\n");
                     }
-//                    if (counter > 100)
-//                        this.stopThread();
-
             }
             catch (Exception e)
             {
@@ -80,6 +71,16 @@ public class Client implements Runnable
         }
 //        }
 
+
+    }
+
+    @Override
+    public void lookup(String productName, int hopCount) {
+
+    }
+
+    @Override
+    public void buy(String sellerID) {
 
     }
 }
