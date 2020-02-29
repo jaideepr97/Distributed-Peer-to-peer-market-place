@@ -62,19 +62,23 @@ public class Server implements Runnable
         {
             try
             {
-
+                System.out.println("Server:"+peerID+", Listening........\n");
                 bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 String data = null;
                 data = bufferedReader.readLine();
                 if(data != null)
                 {
+                    System.out.println("Server:"+peerID+", Data Received!\n");
                     Message message = Message.deserializeMessage(data);
                     if(PeerNode.requestHistory.keySet().contains(message)) {
+                        System.out.println("Server:"+peerID+", Request already present\n");
                         continue;
                     }
                     switch(message.getType()) {
                         case 0:
+                            System.out.println("Server:"+peerID+", Request Type 0\n");
                             if(message.getProductId() == PeerNode.productToSell) {
+                                System.out.println("Server:"+peerID+", Seller has the product!\n");
                                 Message replyMessage = new Message();
                                 replyMessage.setDestinationSellerId(this.peerID);
                                 replyMessage.setType(1);
@@ -84,21 +88,25 @@ public class Server implements Runnable
                                 replyMessage.setProductId(message.getProductId());
                                 replyMessage.setHopCount(0);
                                 replyMessage.setProductName(message.getProductName());
-
                                 synchronized (PeerNode.sharedReplyBuffer) {
+                                    System.out.println("Server:"+peerID+", Adding to sharedReplyBuffer.\n");
                                     PeerNode.sharedReplyBuffer.offer(message);
                                 }
 
                             }
                             else {
+                                System.out.println("Server:"+peerID+", Seller does not have the product, forwarding...\n");
                                 synchronized (PeerNode.sharedRequestBuffer) {
+                                    System.out.println("Server:"+peerID+", Adding to sharedRequestBuffer.\n");
                                     PeerNode.sharedRequestBuffer.offer(message);
                                 }
                             }
 
                             break;
                         case 1:
+                            System.out.println("Server:"+peerID+", Request Type 1\n");
                             if(message.getSourcePeerId() == this.peerID) {
+                                System.out.println("Server:"+peerID+", This is the request originator!\n");
                                 Message replyMessage = new Message();
                                 replyMessage.setDestinationSellerId(message.getDestinationSellerId());
                                 replyMessage.setType(2);
@@ -108,45 +116,49 @@ public class Server implements Runnable
                                 replyMessage.setProductId(message.getProductId());
                                 replyMessage.setHopCount(0);
                                 replyMessage.setProductName(message.getProductName());
-
                                 synchronized (PeerNode.sharedTransactionBuffer) {
+                                    System.out.println("Server:"+peerID+", Adding to sharedTransactionBuffer.\n");
                                     PeerNode.sharedTransactionBuffer.offer(message);
                                 }
                             }
                             else {
+                                System.out.println("Server:"+peerID+", This is not the originator, forwarding...\n");
                                 synchronized (PeerNode.sharedReplyBuffer) {
+                                    System.out.println("Server:"+peerID+", Adding to sharedReplyBuffer.\n");
                                     PeerNode.sharedReplyBuffer.offer(message);
                                 }
                             }
 
                             break;
                         case 2:
+                            System.out.println("Server:"+peerID+", Request Type 2\n");
                             synchronized (PeerNode.numberOfItems) {
                                 if(PeerNode.numberOfItems > 0) {
+                                    System.out.println("Server:"+peerID+", Decrementing number of items\n");
                                     PeerNode.numberOfItems -= 1;
+                                    System.out.println("Server:"+peerID+", New number of items:"+PeerNode.numberOfItems+"\n");
                                 }
                             }
                             break;
                     }
                     //Check if the current server has items
                     synchronized (PeerNode.requestHistory) {
+                        System.out.println("Server:"+peerID+", Adding to requestHistory.\n");
                         PeerNode.requestHistory.put(message, 0);
                     }
-                    System.out.println("Received:"+ data +"\n");
                 }
 //                this.stopThread();
             }
 
             catch (IOException e)
             {
-            System.out.println("(listen): Master Heartbeat for worker" + 0 + "IO exception\n");
+                System.out.println("Server:"+peerID+", Exception in listen():\n");
+                System.out.println(e.getMessage());
             }
         }
 
 //        finally {
-            serverSocket.close();
-            clientSocket.close();
-            bufferedReader.close();
+        this.closeSocket();
 //        }
     }
 
@@ -154,12 +166,13 @@ public class Server implements Runnable
 
         try
         {
-            System.out.println("Server: Starting listen() for Server:" +this.port+"\n");
+            System.out.println("Starting Server for peerID:"+this.peerID+" and port:"+this.port+"\n");
             listen();
         }
         catch(Exception e)
         {
-            System.out.println("Server: Exception in run(): "+e.getStackTrace());
+            System.out.println("Server:"+this.peerID+", Exception in run():\n");
+            System.out.println(e.getMessage());
         }
 
     }

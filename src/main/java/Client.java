@@ -56,21 +56,26 @@ public class Client implements Runnable, P2PBuyerInterface
         while(running) {
             try
             {
+                System.out.println("Client:"+peerId+", Sending request......\n");
                 this.getSocket();
                 if(this.message.getType() == 0) {
+                    System.out.println("Client:"+peerId+", Request type is 0\n");
                     lookup(this.message.getProductName(), this.message.getHopCount());
                 }
                 else if(this.message.getType() == 1) {
+                    System.out.println("Client:"+peerId+", Request type is 1\n");
                     int destinationPeerId = this.message.messagePath.get(this.message.messagePath.size() -1);
                     reply(destinationPeerId);
                 }
                 else if(this.message.getType() == 2) {
+                    System.out.println("Client:"+peerId+", Request type is 2\n");
                     buy(this.message.getDestinationSellerId());
                 }
             }
             catch (Exception e)
             {
-                System.out.println("Client: Exception in run():"+e.getStackTrace()+"\n");
+                System.out.println("Client:"+peerId+", Exception in run():\n");
+                System.out.println(e.getMessage());
             }
         }
 
@@ -78,13 +83,16 @@ public class Client implements Runnable, P2PBuyerInterface
 
     @Override
     public void lookup(String productName, int hopCount) {
+        System.out.println("Client:"+peerId+", Inside lookup()\n");
         try {
             this.message.setHopCount(hopCount-1);
             this.message.messagePath.add(this.peerId);
             clientOutputStream.writeBytes(Message.serializeMessage(this.message));
+            System.out.println("Client:"+peerId+", Message sent");
 
         } catch (IOException e) {
-            System.out.println("Client: IOException\n");
+            System.out.println("Client:"+peerId+", Exception in lookup():\n");
+            System.out.println(e.getMessage());
         }
         finally {
             this.stopThread();
@@ -93,10 +101,12 @@ public class Client implements Runnable, P2PBuyerInterface
 
     @Override
     public void buy(int sellerID) {
+        System.out.println("Client:"+peerId+", Inside buy()\n");
         try {
             clientOutputStream.writeBytes(Message.serializeMessage(this.message));
         } catch (IOException e) {
-            System.out.println("Client: IOException\n");
+            System.out.println("Client:"+peerId+", Exception in buy():\n");
+            System.out.println(e.getMessage());
         }
         finally {
             this.stopThread();
@@ -104,11 +114,13 @@ public class Client implements Runnable, P2PBuyerInterface
     }
     @Override
     public void reply(int sellerID) {
+        System.out.println("Client:"+peerId+", Inside reply()\n");
         this.message.messagePath.remove(this.message.messagePath.size() -1);
         try {
             clientOutputStream.writeBytes(Message.serializeMessage(this.message));
         } catch (IOException e) {
-            System.out.println("Client: IOException\n");
+            System.out.println("Client:"+peerId+", Exception in buy():\n");
+            System.out.println(e.getMessage());
         }
         finally {
             this.stopThread();
