@@ -9,6 +9,15 @@ public class Message {
     private int type;
     private int requestId;
     private int sourcePeerId;
+    private int destinationSellerId;
+
+    public int getDestinationSellerId() {
+        return destinationSellerId;
+    }
+
+    public void setDestinationSellerId(int destinationSellerId) {
+        this.destinationSellerId = destinationSellerId;
+    }
 
     public Message(){
         this.productName = "";
@@ -18,6 +27,7 @@ public class Message {
         this.messagePath = new ArrayList<>();
         this.requestId = 0;
         this.sourcePeerId = 0;
+        this.destinationSellerId = -1;
 
     }
 
@@ -69,6 +79,14 @@ public class Message {
         this.sourcePeerId = sourcePeerId;
     }
 
+    public List<Integer> getMessagePath() {
+        return messagePath;
+    }
+
+    public void setMessagePath(List<Integer> messagePath) {
+        this.messagePath = messagePath;
+    }
+
     @Override
     public boolean equals (Object object) {
         boolean result = false;
@@ -85,6 +103,51 @@ public class Message {
             }
         }
         return result;
+    }
+    public static Message deserializeMessage(String s)
+    {
+        Message m = new Message();
+        String[] objArray = s.split("#");
+        String[] list = objArray[2].split(",");
+        m.setProductName(objArray[0]);
+        m.setProductId(Integer.parseInt(objArray[1]));
+        List<Integer> tempList = new ArrayList();
+        for(int i=0; i<list.length; i++)
+        {
+            tempList.add(Integer.parseInt(list[i]));
+        }
+        m.setMessagePath(tempList);
+        m.setHopCount(Integer.parseInt(objArray[3]));
+        m.setType(Integer.parseInt(objArray[4]));
+        m.setRequestId(Integer.parseInt(objArray[5]));
+        m.setSourcePeerId(Integer.parseInt(objArray[6]));
+        m.setDestinationSellerId(Integer.parseInt(objArray[7]));
+        return m;
+    }
+    public static String serializeMessage(Message m)
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(m.getProductName());
+        sb.append("#");
+        sb.append(m.getProductId());
+        sb.append("#");
+        for(int i: m.getMessagePath())
+        {
+            sb.append(i);
+            sb.append(",");
+        }
+        sb.append("#");
+        sb.append(m.getHopCount());
+        sb.append("#");
+        sb.append(m.getType());
+        sb.append("#");
+        sb.append(m.getRequestId());
+        sb.append("#");
+        sb.append(m.getSourcePeerId());
+        sb.append("#");
+        sb.append(m.getDestinationSellerId());
+        sb.append("#");
+        return sb.toString();
     }
 
 
