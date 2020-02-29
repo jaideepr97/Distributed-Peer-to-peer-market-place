@@ -15,7 +15,6 @@ public class Utilities {
 
     public static void populateStarTopologyConfig()
     {
-        ArrayList<Integer> names = new ArrayList<Integer>( Arrays.asList(5000,5001,5002) );
         HashMap<Integer, Integer> portMap = new HashMap<>();
         portMap.put(1, 5002);
         portMap.put(2, 5007);
@@ -73,6 +72,63 @@ public class Utilities {
         try
         {
             FileWriter f = new FileWriter("StarTopologySixNodesConfig.txt");
+            f.write(jsonString);
+            f.close();
+        }
+        catch (IOException e)
+        {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    public static void populateTestTopologyConfig() {
+
+        HashMap<Integer, Integer> portMap = new HashMap<>();
+        portMap.put(1, 5001);
+        portMap.put(2, 5005);
+        portMap.put(3, 5008);
+        portMap.put(4, 5011);
+
+        List<Config> configList = new ArrayList<>();
+        // 1
+        Config config = new Config(1,
+                new ArrayList<Integer>(Arrays.asList(5000,5001)),
+                new ArrayList<Integer>(Arrays.asList(5002)),
+                new ArrayList<Integer>( Arrays.asList(2)),
+                new HashMap<>(portMap));
+        configList.add(config);
+        // 2
+        config = new Config(2,
+                new ArrayList<Integer>(Arrays.asList(5002,5003,5004, 5005)),
+                new ArrayList<Integer>(Arrays.asList(5000,5006, 5009)),
+                new ArrayList<Integer>( Arrays.asList(1,3,4)),
+                new HashMap<>(portMap));
+        configList.add(config);
+        //3
+        config = new Config(3,
+                new ArrayList<Integer>(Arrays.asList(5006,5007,5008)),
+                new ArrayList<Integer>(Arrays.asList(5003,5010)),
+                new ArrayList<Integer>( Arrays.asList(2,4)),
+                new HashMap<>(portMap));
+        configList.add(config);
+        //4
+        config = new Config(4,
+                new ArrayList<Integer>(Arrays.asList(5009,5010,5011)),
+                new ArrayList<Integer>(Arrays.asList(5007,5004)),
+                new ArrayList<Integer>( Arrays.asList(2,3)),
+                new HashMap<>(portMap));
+        configList.add(config);
+        //5
+
+        // create a new Gson instance
+        Gson gson = new Gson();
+        // convert your list to json
+        String jsonString = gson.toJson(configList);
+        // print your generated json
+        try
+        {
+            FileWriter f = new FileWriter("TestTopologySixNodesConfig.txt");
             f.write(jsonString);
             f.close();
         }
