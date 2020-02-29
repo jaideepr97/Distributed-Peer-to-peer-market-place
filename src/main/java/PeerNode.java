@@ -20,18 +20,15 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
 
 public class PeerNode {
-//    private static final String JAVA_FILE_LOCATION = "/Users/aayushgupta/IdeaProjects/lab-1-rao-gupta/src/main/java/";
 //    private static final String CONFIG_FILE_LOCATION = "/Users/aayushgupta/IdeaProjects/lab-1-rao-gupta/config.txt";
     private static final String CONFIG_FILE_LOCATION = "/home/hadoopuser/Desktop/lab-1-rao-gupta/config.txt";
 
 
     private static Config config;
-    static int peerPort;
-    static int neighbourPort;
     static int peerID;
     static int requestId;
     static int productToSell;
-    static int numberOfItems;
+    public static Integer numberOfItems;
     static int productToBuy;
     static boolean running = true;
     public static ConcurrentLinkedQueue<Message> sharedRequestBuffer = new ConcurrentLinkedQueue<>();
@@ -65,6 +62,12 @@ public class PeerNode {
         lookupRequestGeneratorThread.start();
 
         while(running) {
+
+            synchronized (numberOfItems) {
+                if(numberOfItems <1) {
+                    getSellDetails();
+                }
+            }
             synchronized (sharedRequestBuffer) {
                 if (sharedRequestBuffer.size() > 0) {
                     Message m = sharedRequestBuffer.poll();
@@ -74,6 +77,7 @@ public class PeerNode {
                         clientThread.start();
                     }
                 }
+
             }
             synchronized (sharedReplyBuffer) {
                 if (sharedReplyBuffer.size() > 0) {

@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server implements Runnable, P2PSellerInterface
+public class Server implements Runnable
 {
     int port;
     int peerID;
@@ -68,7 +68,70 @@ public class Server implements Runnable, P2PSellerInterface
                 data = bufferedReader.readLine();
                 if(data != null)
                 {
+                    Message message = Message.deserializeMessage(data);
+                    if(PeerNode.requestHistory.keySet().contains(message)) {
+                        continue;
+                    }
+                    switch(message.getType()) {
+                        case 0:
+                            if(message.getProductId() == PeerNode.productToSell) {
+                                Message replyMessage = new Message();
+                                replyMessage.setDestinationSellerId(this.peerID);
+                                replyMessage.setType(1);
+                                replyMessage.setSourcePeerId(message.getSourcePeerId());
+                                replyMessage.setMessagePath(message.getMessagePath());
+                                replyMessage.setRequestId(message.getRequestId());
+                                replyMessage.setProductId(message.getProductId());
+                                replyMessage.setHopCount(0);
+                                replyMessage.setProductName(message.getProductName());
+
+                                synchronized (PeerNode.sharedReplyBuffer) {
+                                    PeerNode.sharedReplyBuffer.offer(message);
+                                }
+
+                            }
+                            else {
+                                synchronized (PeerNode.sharedRequestBuffer) {
+                                    PeerNode.sharedRequestBuffer.offer(message);
+                                }
+                            }
+
+                            break;
+                        case 1:
+                            if(message.getSourcePeerId() == this.peerID) {
+                                Message replyMessage = new Message();
+                                replyMessage.setDestinationSellerId(message.getDestinationSellerId());
+                                replyMessage.setType(2);
+                                replyMessage.setSourcePeerId(message.getSourcePeerId());
+                                replyMessage.setMessagePath(message.getMessagePath());
+                                replyMessage.setRequestId(message.getRequestId());
+                                replyMessage.setProductId(message.getProductId());
+                                replyMessage.setHopCount(0);
+                                replyMessage.setProductName(message.getProductName());
+
+                                synchronized (PeerNode.sharedTransactionBuffer) {
+                                    PeerNode.sharedTransactionBuffer.offer(message);
+                                }
+                            }
+                            else {
+                                synchronized (PeerNode.sharedReplyBuffer) {
+                                    PeerNode.sharedReplyBuffer.offer(message);
+                                }
+                            }
+
+                            break;
+                        case 2:
+                            synchronized (PeerNode.numberOfItems) {
+                                if(PeerNode.numberOfItems > 0) {
+                                    PeerNode.numberOfItems -= 1;
+                                }
+                            }
+                            break;
+                    }
                     //Check if the current server has items
+                    synchronized (PeerNode.requestHistory) {
+                        PeerNode.requestHistory.put(message, 0);
+                    }
                     System.out.println("Received:"+ data +"\n");
                 }
 //                this.stopThread();
@@ -102,9 +165,5 @@ public class Server implements Runnable, P2PSellerInterface
     }
 
 
-    @Override
-    public void reply(String sellerID) {
-
-    }
 
 }

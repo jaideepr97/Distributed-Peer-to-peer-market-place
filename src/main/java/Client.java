@@ -79,7 +79,7 @@ public class Client implements Runnable, P2PBuyerInterface
     @Override
     public void lookup(String productName, int hopCount) {
         try {
-            this.message.setHopCount(hopCount -1);
+            this.message.setHopCount(hopCount-1);
             this.message.messagePath.add(this.peerId);
             clientOutputStream.writeBytes(Message.serializeMessage(this.message));
 
