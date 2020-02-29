@@ -53,34 +53,65 @@ public class Client implements Runnable, P2PBuyerInterface
 
     @Override
     public void run() {
-//        int counter = 0;
         while(running) {
             try
             {
-                    this.getSocket();
-                    try {
-                        clientOutputStream.writeBytes(this.message + "\n");
-                    } catch (IOException e) {
-                        System.out.println("Client: IOException\n");
-                    }
+                this.getSocket();
+                if(this.message.getType() == 0) {
+                    lookup(this.message.getProductName(), this.message.getHopCount());
+                }
+                else if(this.message.getType() == 1) {
+                    int destinationPeerId = this.message.messagePath.get(this.message.messagePath.size() -1);
+                    reply(destinationPeerId);
+                }
+                else if(this.message.getType() == 2) {
+                    buy(this.message.getDestinationSellerId());
+                }
             }
             catch (Exception e)
             {
                 System.out.println("Client: Exception in run():"+e.getStackTrace()+"\n");
             }
         }
-//        }
-
 
     }
 
     @Override
     public void lookup(String productName, int hopCount) {
+        try {
+            this.message.setHopCount(hopCount -1);
+            this.message.messagePath.add(this.peerId);
+            clientOutputStream.writeBytes(Message.serializeMessage(this.message));
 
+        } catch (IOException e) {
+            System.out.println("Client: IOException\n");
+        }
+        finally {
+            this.stopThread();
+        }
     }
 
     @Override
-    public void buy(String sellerID) {
-
+    public void buy(int sellerID) {
+        try {
+            clientOutputStream.writeBytes(Message.serializeMessage(this.message));
+        } catch (IOException e) {
+            System.out.println("Client: IOException\n");
+        }
+        finally {
+            this.stopThread();
+        }
+    }
+    @Override
+    public void reply(int sellerID) {
+        this.message.messagePath.remove(this.message.messagePath.size() -1);
+        try {
+            clientOutputStream.writeBytes(Message.serializeMessage(this.message));
+        } catch (IOException e) {
+            System.out.println("Client: IOException\n");
+        }
+        finally {
+            this.stopThread();
+        }
     }
 }

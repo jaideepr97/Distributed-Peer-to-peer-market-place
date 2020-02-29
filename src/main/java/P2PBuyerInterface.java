@@ -11,6 +11,8 @@ public interface P2PBuyerInterface {
      * This method will be used by the buyers to directly connect to a seller and buy a product
      * @param sellerID - Contains the ID of the seller
      */
-    public void buy(String sellerID);
+    public void buy(int sellerID);
+
+    public void reply(int sellerID);
 
 }

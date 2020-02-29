@@ -76,7 +76,6 @@ public class PeerNode {
             if(sharedReplyBuffer.size() > 0) {
                 for(Message m: sharedReplyBuffer.keySet()) {
                     int destinationPeerId = m.messagePath.get(m.messagePath.size() -1);
-                    m.messagePath.remove(m.messagePath.size() -1);
                     Client client = new Client(config.getPortMap().get(destinationPeerId), peerID, m);
                     Thread clientThread = new Thread(client);
                     clientThread.start();
@@ -153,7 +152,7 @@ class LookupRequestGenerator implements Runnable {
 
                 PeerNode.requestId += 1;
                 newLookupRequest.setRequestId(PeerNode.requestId);
-                newLookupRequest.setHopCount(timeToSleep-2);
+                newLookupRequest.setHopCount(timeToSleep-3);
                 newLookupRequest.setSourcePeerId(PeerNode.peerID);
                 newLookupRequest.setProductId(productId);
                 newLookupRequest.setType(0);
