@@ -94,11 +94,8 @@ public class Message {
             result = false;
         } else {
             Message message = (Message) object;
-            if (this.hopCount == message.getHopCount() && this.type == message.getType() &&
-                    this.productName.equals(message.getProductName()) &&
-                    this.sourcePeerId == message.getSourcePeerId() &&
-                    this.requestId == message.getRequestId() &&
-                    this.productId == message.getProductId()) {
+            if (this.sourcePeerId == message.getSourcePeerId() &&
+                    this.requestId == message.getRequestId()) {
                 result = true;
             }
         }
@@ -106,6 +103,7 @@ public class Message {
     }
     public static Message deserializeMessage(String s)
     {
+        System.out.println("Message:"+s+"\n");
         Message m = new Message();
         String[] objArray = s.split("#");
         String[] list = objArray[2].split(",");
@@ -114,6 +112,8 @@ public class Message {
         List<Integer> tempList = new ArrayList();
         for(int i=0; i<list.length; i++)
         {
+            if(list[i].length() == 0)
+                continue;
             tempList.add(Integer.parseInt(list[i]));
         }
         m.setMessagePath(tempList);
@@ -147,6 +147,7 @@ public class Message {
         sb.append("#");
         sb.append(m.getDestinationSellerId());
         sb.append("#");
+        sb.append("\n");
         return sb.toString();
     }
 

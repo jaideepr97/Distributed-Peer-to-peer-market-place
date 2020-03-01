@@ -20,11 +20,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
 
 public class PeerNode {
-//    private static final String CONFIG_FILE_LOCATION = "/Users/aayushgupta/IdeaProjects/lab-1-rao-gupta/";
-    private static final String CONFIG_FILE_LOCATION = "/home/hadoopuser/Desktop/lab-1-rao-gupta/";
-    private static final String FILENAME = "TestTopologySixNodesConfig.txt";
+    private static final String CONFIG_FILE_LOCATION = "/Users/aayushgupta/IdeaProjects/lab-1-rao-gupta/";
+    //private static final String CONFIG_FILE_LOCATION = "/home/hadoopuser/Desktop/lab-1-rao-gupta/";
+    private static final String FILENAME = "TestTopologyFourNodesConfig.txt";
 
-
+    public static HashMap<Integer, String> productMap = new HashMap<>();
     private static Config config;
     static int peerID;
     static int requestId;
@@ -36,13 +36,16 @@ public class PeerNode {
     public static ConcurrentHashMap<Message, Integer> requestHistory = new ConcurrentHashMap();
     public static ConcurrentLinkedQueue<Message> sharedReplyBuffer = new ConcurrentLinkedQueue<>();
     public static ConcurrentLinkedQueue<Message> sharedTransactionBuffer = new ConcurrentLinkedQueue<>();
-
+    public static ConcurrentHashMap<Integer, Integer> servicedRequests = new ConcurrentHashMap<>();
 
     public static void main(String[] args)  {
 
         peerID = Integer.parseInt(args[0]);
         System.out.println("---------Starting peer with ID: "+ peerID+"----------\n");
         requestId = 0;
+        productMap.put(0, "Boar");
+        productMap.put(1, "Fish");
+        productMap.put(2, "Salt");
         System.out.println("Getting Config for peerID:"+peerID+"\n");
         getConfig();
         System.out.println("Setting Seller details for peerID:"+peerID+"\n");
@@ -78,13 +81,21 @@ public class PeerNode {
                 if (sharedRequestBuffer.size() > 0) {
                     System.out.println("Number of items in sharedRequestBuffer > 0 for peerID:"+peerID+"\n");
                     Message m = sharedRequestBuffer.poll();
+                    m.setHopCount(m.getHopCount()-1);
+                    int lastNeighbourID = -1;
+                    if(m.getMessagePath().size() > 0)
+                    {
+                        lastNeighbourID = m.getMessagePath().get(m.getMessagePath().size()-1);
+                    }
+                    m.messagePath.add(peerID);
                     System.out.println("Starting client threads for peerID:"+peerID+"\n");
                     for (int i = 0; i < config.getNeighborIDs().size(); i++) {
                         int port = config.getNeighborPorts().get(i);
-                        Client client = new Client(port, peerID, m);
-                        Thread clientThread = new Thread(client);
-                        clientThread.start();
-                        System.out.println("Client started for port:"+port+"\n");
+                        if(lastNeighbourID == -1 || port != config.getPortMap().get(lastNeighbourID)) {
+                            Client client = new Client(port, peerID, m, -1);
+                            Thread clientThread = new Thread(client);
+                            clientThread.start();
+                        }
                     }
                 }
 
@@ -94,14 +105,12 @@ public class PeerNode {
                     System.out.println("Number of items in sharedReplyBuffer > 0 for peerID:"+peerID+"\n");
                     Message m = sharedReplyBuffer.poll();
                     int destinationPeerId = m.messagePath.get(m.messagePath.size() - 1);
+                    m.messagePath.remove(m.messagePath.size() -1);
                     System.out.println("Starting client thread for peerID:"+peerID+"\n");
                     int port = config.getPortMap().get(destinationPeerId);
-                    Client client = new Client(port, peerID, m);
+                    Client client = new Client(port, peerID, m, destinationPeerId);
                     Thread clientThread = new Thread(client);
                     clientThread.start();
-                    System.out.println("Client started for port:"+port+"\n");
-
-
                 }
             }
             synchronized (sharedTransactionBuffer)
@@ -112,10 +121,19 @@ public class PeerNode {
                     int destinationPeerId = m.getDestinationSellerId();
                     System.out.println("Starting client thread for peerID:"+peerID+"\n");
                     int port = config.getPortMap().get(destinationPeerId);
-                    Client client = new Client(port, peerID, m);
-                    Thread clientThread = new Thread(client);
-                    clientThread.start();
-                    System.out.println("Client started for port:"+port+"\n");
+                    synchronized (servicedRequests)
+                    {
+                        if(!servicedRequests.containsKey(m.getRequestId()))
+                        {
+                            Client client = new Client(port, peerID, m, -1);
+                            Thread clientThread = new Thread(client);
+                            clientThread.start();
+                        }
+                        else
+                        {
+                            System.out.println("Peer:"+peerID+", Buy request already serviced!\n");
+                        }
+                    }
                 }
             }
         }
@@ -195,10 +213,11 @@ class LookupRequestGenerator implements Runnable {
                 PeerNode.requestId += 1;
                 System.out.println("New request with ID:"+PeerNode.requestId+" for peerID:"+PeerNode.peerID+"\n");
                 newLookupRequest.setRequestId(PeerNode.requestId);
-                newLookupRequest.setHopCount(timeToSleep-3);
+                newLookupRequest.setHopCount(3);
                 newLookupRequest.setSourcePeerId(PeerNode.peerID);
                 newLookupRequest.setProductId(productId);
                 newLookupRequest.setType(0);
+                newLookupRequest.setProductName(PeerNode.productMap.get(productId));
                 System.out.println("Adding request with ID:"+PeerNode.requestId+" to the sharedRequestBuffer for peerID:"+PeerNode.peerID+"\n");
 
                 System.out.println("-----------------------------");
@@ -209,6 +228,10 @@ class LookupRequestGenerator implements Runnable {
                 synchronized (PeerNode.sharedRequestBuffer)
                 {
                     PeerNode.sharedRequestBuffer.offer(newLookupRequest);
+                }
+                synchronized (PeerNode.requestHistory)
+                {
+                    PeerNode.requestHistory.put(newLookupRequest, 0);
                 }
 
             } catch (InterruptedException e) {

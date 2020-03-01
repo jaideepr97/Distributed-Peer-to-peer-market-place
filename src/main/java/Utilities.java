@@ -11,7 +11,8 @@ public class Utilities {
 
     public static void main(String[] args) {
 //        populateStarTopologyConfig();
-        populateTestTopologyConfig();
+        //populateTestTopologyConfig();
+        test();
     }
 
     public static void populateStarTopologyConfig()
@@ -85,6 +86,7 @@ public class Utilities {
 
     public static void populateTestTopologyConfig() {
 
+        // Four Nodes
         HashMap<Integer, Integer> portMap = new HashMap<>();
         portMap.put(1, 5001);
         portMap.put(2, 5005);
@@ -129,7 +131,7 @@ public class Utilities {
         // print your generated json
         try
         {
-            FileWriter f = new FileWriter("TestTopologySixNodesConfig.txt");
+            FileWriter f = new FileWriter("TestTopologyFourNodesConfig.txt");
             f.write(jsonString);
             f.close();
         }
@@ -137,6 +139,58 @@ public class Utilities {
         {
             System.out.println(e.getMessage());
         }
+        //Two Nodes
+        /*
+        HashMap<Integer, Integer> portMap = new HashMap<>();
+        portMap.put(1, 5000);
+        portMap.put(2, 5001);
+
+        List<Config> configList = new ArrayList<>();
+        // 1
+        Config config = new Config(1,
+                new ArrayList<Integer>(Arrays.asList(5000)),
+                new ArrayList<Integer>(Arrays.asList(5001)),
+                new ArrayList<Integer>( Arrays.asList(1)),
+                new HashMap<>(portMap));
+        configList.add(config);
+        // 2
+        config = new Config(2,
+                new ArrayList<Integer>(Arrays.asList(5001)),
+                new ArrayList<Integer>(Arrays.asList(5000)),
+                new ArrayList<Integer>( Arrays.asList(2)),
+                new HashMap<>(portMap));
+        configList.add(config);
+
+        // create a new Gson instance
+        Gson gson = new Gson();
+        // convert your list to json
+        String jsonString = gson.toJson(configList);
+        // print your generated json
+        try
+        {
+            FileWriter f = new FileWriter("TestTopologyTwoNodesConfig.txt");
+            f.write(jsonString);
+            f.close();
+        }
+        catch (IOException e)
+        {
+            System.out.println(e.getMessage());
+        }
+
+         */
+
+    }
+    public static void test()
+    {
+        Message m = new Message();
+        m.setSourcePeerId(1);
+        m.setRequestId(1);
+        Message n = new Message();
+        n.setRequestId(1);
+        n.setSourcePeerId(1);
+        System.out.println(m.equals(n));
+        n.setSourcePeerId(2);
+        System.out.println(m.equals(n));
     }
 
 

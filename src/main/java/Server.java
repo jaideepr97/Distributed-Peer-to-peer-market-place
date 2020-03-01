@@ -71,12 +71,14 @@ public class Server implements Runnable
                 {
                     System.out.println("Server:"+peerID+", Data Received!\n");
                     Message message = Message.deserializeMessage(data);
-                    if(PeerNode.requestHistory.keySet().contains(message) ) {
-                        System.out.println("Server:"+peerID+", Request already present\n");
-                        continue;
+                    synchronized (PeerNode.requestHistory)
+                    {
+                        if(PeerNode.requestHistory.keySet().contains(message) ) {
+                            System.out.println("Server:"+peerID+", Request already present\n");
+                            continue;
+                        }
                     }
-
-                    if(message.getHopCount() < 1) {
+                    if(message.getType() == 0 && message.getHopCount() < 1) {
                         System.out.println("Server:"+peerID+", Hops exhausted for this message\n");
                         continue;
                     }
@@ -87,6 +89,7 @@ public class Server implements Runnable
                                 System.out.println("Server:"+peerID+", Seller has the product!\n");
                                 Message replyMessage = new Message();
                                 replyMessage.setDestinationSellerId(this.peerID);
+                                replyMessage.setProductName(PeerNode.productMap.get(message.getProductId()));
                                 replyMessage.setType(1);
                                 replyMessage.setSourcePeerId(message.getSourcePeerId());
                                 replyMessage.setMessagePath(message.getMessagePath());
@@ -94,10 +97,11 @@ public class Server implements Runnable
                                 replyMessage.setProductId(message.getProductId());
                                 replyMessage.setHopCount(0);
                                 replyMessage.setProductName(message.getProductName());
+                                /*
                                 synchronized (PeerNode.sharedReplyBuffer) {
                                     boolean contains = false;
                                     for(Message m: PeerNode.sharedReplyBuffer) {
-                                        if(m.getRequestId() == replyMessage.getRequestId()) {
+                                        if(m.equals(replyMessage)) {
                                             contains = true;
                                             break;
                                         }
@@ -111,7 +115,12 @@ public class Server implements Runnable
                                     }
 
                                 }
-
+                                 */
+                                synchronized (PeerNode.sharedReplyBuffer)
+                                {
+                                    System.out.println("Server:"+peerID+", Adding to sharedReplyBuffer.\n");
+                                    PeerNode.sharedReplyBuffer.offer(replyMessage);
+                                }
                             }
                             else {
                                 System.out.println("Server:"+peerID+", Seller does not have the product, forwarding...\n");
@@ -128,6 +137,7 @@ public class Server implements Runnable
                                 System.out.println("Server:"+peerID+", This is the request originator!\n");
                                 Message replyMessage = new Message();
                                 replyMessage.setDestinationSellerId(message.getDestinationSellerId());
+                                replyMessage.setProductName(PeerNode.productMap.get(message.getProductId()));
                                 replyMessage.setType(2);
                                 replyMessage.setSourcePeerId(message.getSourcePeerId());
                                 replyMessage.setMessagePath(message.getMessagePath());
@@ -137,7 +147,7 @@ public class Server implements Runnable
                                 replyMessage.setProductName(message.getProductName());
                                 synchronized (PeerNode.sharedTransactionBuffer) {
                                     System.out.println("Server:"+peerID+", Adding to sharedTransactionBuffer.\n");
-                                    PeerNode.sharedTransactionBuffer.offer(message);
+                                    PeerNode.sharedTransactionBuffer.offer(replyMessage);
                                 }
                             }
                             else {
@@ -156,6 +166,7 @@ public class Server implements Runnable
                                     System.out.println("Server:"+peerID+", Decrementing number of items\n");
                                     PeerNode.numberOfItems -= 1;
                                     System.out.println("Server:"+peerID+", New number of items:"+PeerNode.numberOfItems+"\n");
+                                    System.out.println("Product sold!!\n");
                                 }
                             }
                             break;
@@ -191,7 +202,7 @@ public class Server implements Runnable
         catch(Exception e)
         {
             System.out.println("Server:"+this.peerID+", Exception in run():\n");
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
     }
