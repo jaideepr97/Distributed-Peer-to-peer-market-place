@@ -9,20 +9,29 @@ public class Config {
     private List<Integer> neighborPorts;
     private List<Integer> neighborIDs;
     private HashMap<Integer, Integer> portMap;
+    private HashMap<Integer, Integer> locationMap;
 
     public Config(int _peerID,
                   List<Integer> _serverPorts,
                   List<Integer> _neighborPorts,
                   List<Integer> _neighborIDs,
-                  HashMap<Integer, Integer> _portMap)
+                  HashMap<Integer, Integer> _portMap,
+                  HashMap<Integer, Integer> _locationMap)
     {
         this.peerID = _peerID;
         this.serverPorts = _serverPorts;
         this.neighborPorts = _neighborPorts;
         this.neighborIDs = _neighborIDs;
         this.portMap = _portMap;
+        this.locationMap = _locationMap;
+    }
+    public HashMap<Integer, Integer> getLocationMap() {
+        return locationMap;
     }
 
+    public void setLocationMap(HashMap<Integer, Integer> locationMap) {
+        this.locationMap = locationMap;
+    }
     public int getPeerID() {
         return peerID;
     }

@@ -16,17 +16,19 @@ public class Client implements Runnable, P2PBuyerInterface
     volatile boolean running;
     Message message;
     int nextPeerID;
+    String host;
     public Client()
     {
         running = true;
     }
-    public Client(int _port, int peerId, Message message, int _nextPeerID)
+    public Client(String _host, int _port, int peerId, Message message, int _nextPeerID)
     {
         this.port = _port;
         this.peerId = peerId;
         this.message = message;
         this.nextPeerID = _nextPeerID;
         running = true;
+        this.host = _host;
     }
 
     public void stopThread()
@@ -36,7 +38,7 @@ public class Client implements Runnable, P2PBuyerInterface
 
     public void getSocket() throws IOException
     {
-        clientSocket = new Socket("localhost", this.port);
+        clientSocket = new Socket(this.host, this.port);
         clientOutputStream = new DataOutputStream(clientSocket.getOutputStream());
         bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
     }
@@ -99,7 +101,7 @@ public class Client implements Runnable, P2PBuyerInterface
 
         } catch (IOException e) {
             System.out.println("Client:"+peerId+", Exception in lookup():\n");
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         finally {
             this.stopThread();
@@ -118,7 +120,7 @@ public class Client implements Runnable, P2PBuyerInterface
 
         } catch (IOException e) {
             System.out.println("Client:"+peerId+", Exception in buy():\n");
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         finally {
             this.stopThread();
@@ -131,8 +133,8 @@ public class Client implements Runnable, P2PBuyerInterface
         try {
             clientOutputStream.writeBytes(Message.serializeMessage(this.message));
         } catch (IOException e) {
-            System.out.println("Client:"+peerId+", Exception in buy():\n");
-            System.out.println(e.getMessage());
+            System.out.println("Client:"+peerId+", Exception in reply():\n");
+            e.printStackTrace();
         }
         finally {
             this.stopThread();

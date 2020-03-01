@@ -18,7 +18,6 @@ public class Server implements Runnable
     BufferedReader bufferedReader ;
     DataOutputStream outputStream ;
     volatile boolean running;
-
     public Server()
     {
         running = true;
@@ -74,7 +73,7 @@ public class Server implements Runnable
                     synchronized (PeerNode.requestHistory)
                     {
                         if(PeerNode.requestHistory.keySet().contains(message) ) {
-                            System.out.println("Server:"+peerID+", Request already present\n");
+                            System.out.println("Server:"+peerID+", Request already serviced\n");
                             continue;
                         }
                     }
@@ -85,7 +84,8 @@ public class Server implements Runnable
                     switch(message.getType()) {
                         case 0:
                             System.out.println("Server:"+peerID+", Request Type 0\n");
-                            if(message.getProductId() == PeerNode.productToSell) {
+                            if((PeerNode.role == 1 || PeerNode.role == 2) &&
+                                    message.getProductId() == PeerNode.productToSell) {
                                 System.out.println("Server:"+peerID+", Seller has the product!\n");
                                 Message replyMessage = new Message();
                                 replyMessage.setDestinationSellerId(this.peerID);
@@ -123,13 +123,19 @@ public class Server implements Runnable
                                 }
                             }
                             else {
-                                System.out.println("Server:"+peerID+", Seller does not have the product, forwarding...\n");
+                                if(PeerNode.role == 0)
+                                {
+                                    System.out.println("Server:"+peerID+", is not a seller, forwarding...\n");
+                                }
+                                else
+                                {
+                                    System.out.println("Server:"+peerID+", Seller does not have the product, forwarding...\n");
+                                }
                                 synchronized (PeerNode.sharedRequestBuffer) {
                                     System.out.println("Server:"+peerID+", Adding to sharedRequestBuffer.\n");
                                     PeerNode.sharedRequestBuffer.offer(message);
                                 }
                             }
-
                             break;
                         case 1:
                             System.out.println("Server:"+peerID+", Request Type 1\n");
@@ -166,7 +172,9 @@ public class Server implements Runnable
                                     System.out.println("Server:"+peerID+", Decrementing number of items\n");
                                     PeerNode.numberOfItems -= 1;
                                     System.out.println("Server:"+peerID+", New number of items:"+PeerNode.numberOfItems+"\n");
-                                    System.out.println("Product sold!!\n");
+                                    System.out.println("\n----------Product sold!!-------------\n");
+                                    System.out.println("\nDetails:Product:"+message.getProductName()+
+                                            ", Buyer:"+message.getSourcePeerId()+", Seller:"+peerID+"\n");
                                 }
                             }
                             break;
@@ -183,7 +191,7 @@ public class Server implements Runnable
             catch (IOException e)
             {
                 System.out.println("Server:"+peerID+", Exception in listen():\n");
-                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
         }
 

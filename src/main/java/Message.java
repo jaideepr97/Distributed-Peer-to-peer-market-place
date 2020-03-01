@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Message {
     private String productName;
@@ -10,6 +11,15 @@ public class Message {
     private int requestId;
     private int sourcePeerId;
     private int destinationSellerId;
+    private int destinationSellerLocation;
+
+    public int getDestinationSellerLocation() {
+        return destinationSellerLocation;
+    }
+
+    public void setDestinationSellerLocation(int destinationSellerLocation) {
+        this.destinationSellerLocation = destinationSellerLocation;
+    }
 
     public int getDestinationSellerId() {
         return destinationSellerId;
@@ -28,6 +38,7 @@ public class Message {
         this.requestId = 0;
         this.sourcePeerId = 0;
         this.destinationSellerId = -1;
+        this.destinationSellerLocation = -1;
 
     }
 
@@ -95,12 +106,19 @@ public class Message {
         } else {
             Message message = (Message) object;
             if (this.sourcePeerId == message.getSourcePeerId() &&
-                    this.requestId == message.getRequestId()) {
+                    this.requestId == message.getRequestId() &&
+                    this.type == message.type) {
                 result = true;
             }
         }
         return result;
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(requestId, sourcePeerId, type);
+    }
+
     public static Message deserializeMessage(String s)
     {
         System.out.println("Message:"+s+"\n");
@@ -122,6 +140,7 @@ public class Message {
         m.setRequestId(Integer.parseInt(objArray[5]));
         m.setSourcePeerId(Integer.parseInt(objArray[6]));
         m.setDestinationSellerId(Integer.parseInt(objArray[7]));
+        m.setDestinationSellerLocation(Integer.parseInt(objArray[8]));
         return m;
     }
     public static String serializeMessage(Message m)
@@ -146,6 +165,8 @@ public class Message {
         sb.append(m.getSourcePeerId());
         sb.append("#");
         sb.append(m.getDestinationSellerId());
+        sb.append("#");
+        sb.append(m.getDestinationSellerLocation());
         sb.append("#");
         sb.append("\n");
         return sb.toString();
