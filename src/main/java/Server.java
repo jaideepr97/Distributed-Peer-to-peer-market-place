@@ -62,7 +62,7 @@ public class Server implements Runnable
             {
                 clientSocket = serverSocket.accept();
                 outputStream = new DataOutputStream(clientSocket.getOutputStream());
-                bufferedReader = null;
+//                bufferedReader = null;
                 System.out.println("Server:"+peerID+", Listening........\n");
                 bufferedReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 String data = null;
@@ -95,8 +95,21 @@ public class Server implements Runnable
                                 replyMessage.setHopCount(0);
                                 replyMessage.setProductName(message.getProductName());
                                 synchronized (PeerNode.sharedReplyBuffer) {
-                                    System.out.println("Server:"+peerID+", Adding to sharedReplyBuffer.\n");
-                                    PeerNode.sharedReplyBuffer.offer(message);
+                                    boolean contains = false;
+                                    for(Message m: PeerNode.sharedReplyBuffer) {
+                                        if(m.getRequestId() == replyMessage.getRequestId()) {
+                                            contains = true;
+                                            break;
+                                        }
+                                    }
+                                    if(!contains) {
+                                        System.out.println("Server:"+peerID+", Adding to sharedReplyBuffer.\n");
+                                        PeerNode.sharedReplyBuffer.offer(message);
+                                    }
+                                    else {
+                                        continue;
+                                    }
+
                                 }
 
                             }
