@@ -126,7 +126,7 @@ public class PeerNode {
                         for (int i = 0; i < config.getNeighborIDs().size(); i++) {
                             int port = config.getNeighborPorts().get(i);
                             if(lastNeighbourID == -1 || port != config.getPortMap().get(lastNeighbourID)) {
-                                String host = config.getLocationMap().get(port) == 0 ? "localhost" : "elnux7.cs.umass.edu";
+                                String host = getHostName(port);
                                 Client client = new Client(host, port, peerID, m, -1);
                                 Thread clientThread = new Thread(client);
                                 clientThread.start();
@@ -144,7 +144,7 @@ public class PeerNode {
                         System.out.println("Starting client thread for peerID:"+peerID+"\n");
                         int port = config.getPortMap().get(destinationPeerId);
                         //System.out.println("\n--------"+port+"---------\n");
-                        String host = config.getLocationMap().get(port) == 0 ? "localhost" : "elnux7.cs.umass.edu";
+                        String host = getHostName(port);
                         Client client = new Client(host, port, peerID, m, destinationPeerId);
                         Thread clientThread = new Thread(client);
                         clientThread.start();
@@ -158,7 +158,7 @@ public class PeerNode {
                         int destinationPeerId = m.getDestinationSellerId();
                         System.out.println("Starting client thread to initiate step 2 for peerID:"+peerID+"\n");
                         int port = config.getPortMap().get(destinationPeerId);
-                        String host = config.getLocationMap().get(port) == 0 ? "localhost" : "elnux7.cs.umass.edu";
+                        String host = getHostName(port);
                         synchronized (servicedRequests)
                         {
                             if(!servicedRequests.containsKey(m.getRequestId()))
@@ -178,6 +178,24 @@ public class PeerNode {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public static String getHostName(int port)
+    {
+        String host = "";
+        if(config.getLocation() == 0 && config.getLocationMap().get(port) == 0)
+        {
+            host = "localhost";
+        }
+        else if((config.getLocation() == 0 && config.getLocationMap().get(port) == 1) ||
+                (config.getLocation() == 1 && config.getLocationMap().get(port) == 1))
+        {
+            host = "elnux7.cs.umass.edu";
+        }
+        else if(config.getLocation() == 1 && config.getLocationMap().get(port) == 0)
+        {
+            host = "172.30.132.77";
+        }
+        return host;
     }
 
     public static void getRole()

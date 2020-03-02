@@ -26,6 +26,7 @@ public class Utilities {
         filePath.concat("path to the property file");
 
     }
+    /*
     public static void populateStarTopologyConfig()
     {
         HashMap<Integer, Integer> portMap = new HashMap<>();
@@ -121,9 +122,12 @@ public class Utilities {
 
     }
 
+     */
+
     public static void populateTestTopologyConfig() {
 
         // Four Nodes
+        /*
         HashMap<Integer, Integer> portMap = new HashMap<>();
         portMap.put(1, 5001);
         portMap.put(2, 5005);
@@ -192,26 +196,37 @@ public class Utilities {
         {
             System.out.println(e.getMessage());
         }
+
+         */
         //Two Nodes
-        /*
         HashMap<Integer, Integer> portMap = new HashMap<>();
-        portMap.put(1, 5000);
-        portMap.put(2, 5001);
+        portMap.put(1, 5001);
+        portMap.put(2, 5003);
+        HashMap<Integer, Integer> locationMap = new HashMap();
+        locationMap.put(5000, 0);
+        locationMap.put(5001, 0);
+        locationMap.put(5002, 1);
+        locationMap.put(5003, 1);
+
 
         List<Config> configList = new ArrayList<>();
         // 1
         Config config = new Config(1,
-                new ArrayList<Integer>(Arrays.asList(5000)),
-                new ArrayList<Integer>(Arrays.asList(5001)),
+                new ArrayList<Integer>(Arrays.asList(5000, 5001)),
+                new ArrayList<Integer>(Arrays.asList(5002)),
                 new ArrayList<Integer>( Arrays.asList(1)),
-                new HashMap<>(portMap));
+                new HashMap<>(portMap),
+                new HashMap<>(locationMap),
+                0);
         configList.add(config);
         // 2
         config = new Config(2,
+                new ArrayList<Integer>(Arrays.asList(5002, 5003)),
                 new ArrayList<Integer>(Arrays.asList(5001)),
-                new ArrayList<Integer>(Arrays.asList(5000)),
                 new ArrayList<Integer>( Arrays.asList(2)),
-                new HashMap<>(portMap));
+                new HashMap<>(portMap),
+                new HashMap<>(locationMap),
+                1);
         configList.add(config);
 
         // create a new Gson instance
@@ -229,8 +244,6 @@ public class Utilities {
         {
             System.out.println(e.getMessage());
         }
-
-         */
 
     }
     public static void test()
