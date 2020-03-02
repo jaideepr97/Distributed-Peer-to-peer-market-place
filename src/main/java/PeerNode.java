@@ -23,7 +23,7 @@ public class PeerNode {
     //private static final String CONFIG_FILE_LOCATION = "/Users/aayushgupta/IdeaProjects/lab-1-rao-gupta/";
     //private static final String CONFIG_FILE_LOCATION = "/home/hadoopuser/Desktop/lab-1-rao-gupta/";
     private static final String CONFIG_FILE_LOCATION = new File("").getAbsolutePath()+"/";
-    private static final String FILENAME = "EightNodes.txt";
+    private static final String FILENAME = "FourNodes.txt";
 
     public static HashMap<Integer, String> productMap = new HashMap<>();
     private static Config config;
