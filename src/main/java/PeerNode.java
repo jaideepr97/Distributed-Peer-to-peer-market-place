@@ -23,7 +23,7 @@ public class PeerNode {
     //private static final String CONFIG_FILE_LOCATION = "/Users/aayushgupta/IdeaProjects/lab-1-rao-gupta/";
     //private static final String CONFIG_FILE_LOCATION = "/home/hadoopuser/Desktop/lab-1-rao-gupta/";
     private static final String CONFIG_FILE_LOCATION = new File("").getAbsolutePath()+"/";
-    private static final String FILENAME = "FourNodes.txt";
+    private static final String FILENAME = "EightNodes.txt";
 
     public static HashMap<Integer, String> productMap = new HashMap<>();
     private static Config config;
@@ -156,7 +156,8 @@ public class PeerNode {
                         System.out.println("Number of items in sharedTransactionBuffer > 0 for peerID:"+peerID+"\n");
                         Message m = sharedTransactionBuffer.poll();
                         int destinationPeerId = m.getDestinationSellerId();
-                        System.out.println("Starting client thread to initiate step 2 for peerID:"+peerID+"\n");
+                        System.out.println("-------------Starting buy process for buyer:"
+                                +peerID+"and seller:"+destinationPeerId+"-------------\n");
                         int port = config.getPortMap().get(destinationPeerId);
                         String host = getHostName(port);
                         synchronized (servicedRequests)
@@ -223,7 +224,6 @@ public class PeerNode {
         System.out.println("ProductID to buy = "+productToBuy+"\n");
         return nextProductToBuy;
     }
-
     public static void getConfig() {
         String json = "";
         try
@@ -301,7 +301,7 @@ class LookupRequestGenerator implements Runnable {
 
             } catch (InterruptedException e) {
                 System.out.println("Exception in LookupRequestGenerator.run() for peerID:"+PeerNode.peerID+"\n");
-                System.out.println(e.getMessage());
+                e.printStackTrace();
                 stopThread();
             }
             if(counter == 5)
