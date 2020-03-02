@@ -13,8 +13,8 @@ import java.util.List;
 public class Utilities {
 
     public static void main(String[] args) {
-        populateStarTopologyConfig();
-        //populateTestTopologyConfig();
+        //populateStarTopologyConfig();
+        populateTestTopologyConfig();
 //        test();
 //        pathTest();
     }
@@ -130,10 +130,18 @@ public class Utilities {
         portMap.put(3, 5008);
         portMap.put(4, 5011);
         HashMap<Integer, Integer> locationMap = new HashMap<>();
-        locationMap.put(1, 0);
-        locationMap.put(2, 0);
-        locationMap.put(3, 0);
-        locationMap.put(4, 0);
+        locationMap.put(5000, 1);
+        locationMap.put(5001, 1);
+        locationMap.put(5002, 1);
+        locationMap.put(5003, 1);
+	locationMap.put(5004, 1);
+        locationMap.put(5005, 1);
+        locationMap.put(5006, 1);
+        locationMap.put(5007, 1);
+	locationMap.put(5008, 1);
+        locationMap.put(5009, 1);
+        locationMap.put(5010, 1);
+        locationMap.put(5011, 1);	
         List<Config> configList = new ArrayList<>();
         // 1
         Config config = new Config(1,
