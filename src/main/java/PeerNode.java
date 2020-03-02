@@ -44,6 +44,7 @@ public class PeerNode {
 
         try {
             peerID = Integer.parseInt(args[0]);
+            setOutputFile();
             System.out.println("---------Starting peer with ID: "+ peerID+"----------\n");
             requestId = 0;
             productMap.put(0, "Boar");
@@ -223,6 +224,17 @@ public class PeerNode {
         productToBuy = nextProductToBuy;
         System.out.println("ProductID to buy = "+productToBuy+"\n");
         return nextProductToBuy;
+    }
+
+    public static void setOutputFile()
+    {
+        try {
+            File file = new File(peerID+"_"+FILENAME+"_output.txt");
+            PrintStream stream = new PrintStream(file);
+            System.setOut(stream);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
     public static void getConfig() {
         String json = "";
