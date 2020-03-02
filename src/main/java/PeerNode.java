@@ -126,8 +126,7 @@ public class PeerNode {
                         for (int i = 0; i < config.getNeighborIDs().size(); i++) {
                             int port = config.getNeighborPorts().get(i);
                             if(lastNeighbourID == -1 || port != config.getPortMap().get(lastNeighbourID)) {
-                                String host = config.getLocationMap().get(port) == 0 ?
-"localhost" : "elnux7.cs.umass.edu";
+                                String host = config.getLocationMap().get(port) == 0 ? "localhost" : "elnux7.cs.umass.edu";
                                 Client client = new Client(host, port, peerID, m, -1);
                                 Thread clientThread = new Thread(client);
                                 clientThread.start();
@@ -145,8 +144,7 @@ public class PeerNode {
                         System.out.println("Starting client thread for peerID:"+peerID+"\n");
                         int port = config.getPortMap().get(destinationPeerId);
                         //System.out.println("\n--------"+port+"---------\n");
-                        String host = config.getLocationMap().get(port) == 0 ? "localhost"
-: "elnux7.cs.umass.edu";
+                        String host = config.getLocationMap().get(port) == 0 ? "localhost" : "elnux7.cs.umass.edu";
                         Client client = new Client(host, port, peerID, m, destinationPeerId);
                         Thread clientThread = new Thread(client);
                         clientThread.start();
@@ -160,8 +158,7 @@ public class PeerNode {
                         int destinationPeerId = m.getDestinationSellerId();
                         System.out.println("Starting client thread to initiate step 2 for peerID:"+peerID+"\n");
                         int port = config.getPortMap().get(destinationPeerId);
-                        String host = config.getLocationMap().get(port) == 0 ? "localhost"
-: "elnux7.cs.umass.edu";
+                        String host = config.getLocationMap().get(port) == 0 ? "localhost" : "elnux7.cs.umass.edu";
                         synchronized (servicedRequests)
                         {
                             if(!servicedRequests.containsKey(m.getRequestId()))

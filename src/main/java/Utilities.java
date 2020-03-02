@@ -130,18 +130,18 @@ public class Utilities {
         portMap.put(3, 5008);
         portMap.put(4, 5011);
         HashMap<Integer, Integer> locationMap = new HashMap<>();
-        locationMap.put(5000, 1);
-        locationMap.put(5001, 1);
-        locationMap.put(5002, 1);
-        locationMap.put(5003, 1);
-	locationMap.put(5004, 1);
-        locationMap.put(5005, 1);
+        locationMap.put(5000, 0);
+        locationMap.put(5001, 0);
+        locationMap.put(5002, 0);
+        locationMap.put(5003, 0);
+	    locationMap.put(5004, 0);
+        locationMap.put(5005, 0);
         locationMap.put(5006, 1);
         locationMap.put(5007, 1);
-	locationMap.put(5008, 1);
-        locationMap.put(5009, 1);
-        locationMap.put(5010, 1);
-        locationMap.put(5011, 1);	
+	    locationMap.put(5008, 1);
+        locationMap.put(5009, 0);
+        locationMap.put(5010, 0);
+        locationMap.put(5011, 0);
         List<Config> configList = new ArrayList<>();
         // 1
         Config config = new Config(1,
