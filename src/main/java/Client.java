@@ -122,6 +122,12 @@ public class Client implements Runnable, P2PBuyerInterface
             {
                 PeerNode.servicedRequests.put(this.message.getRequestId(), 0);
             }
+            String ack = bufferedReader.readLine();
+            if(ack.equals("0"))
+            {
+                System.out.println("-------Bought product:"+message.getProductName()+
+                        " from seller:"+message.getDestinationSellerId()+"------------");
+            }
 
         } catch (IOException e) {
             System.out.println("Client:"+peerId+", Exception in buy():\n");

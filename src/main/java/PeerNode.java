@@ -192,6 +192,7 @@ public class PeerNode {
             {
                 t.interrupt();
             }
+            System.exit(0);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -225,7 +226,7 @@ public class PeerNode {
     public static void getSellDetails() {
         Random r = new Random();
         productToSell = r.nextInt((2 - 0) + 1);
-        System.out.println("Product to sell = "+productMap.getOrDefault(productToSell, "")+"\n");
+        System.out.println("\n############### Product to sell = "+productMap.getOrDefault(productToSell, "")+" ###############\n");
         numberOfItems = 10;
     }
 
@@ -237,7 +238,7 @@ public class PeerNode {
             nextProductToBuy  = r.nextInt((2 - 0) + 1);;
         }while(nextProductToBuy == productToSell);
         productToBuy = nextProductToBuy;
-        System.out.println("Product to buy = "+productMap.getOrDefault(productToBuy, "")+"\n");
+        //System.out.println("Product to buy = "+productMap.getOrDefault(productToBuy, "")+"\n");
         return nextProductToBuy;
     }
 
@@ -311,10 +312,8 @@ class LookupRequestGenerator implements Runnable {
                 newLookupRequest.setType(0);
                 newLookupRequest.setProductName(PeerNode.productMap.get(productId));
                 //System.out.println("Adding request with ID:"+PeerNode.requestId+" to the sharedRequestBuffer for peerID:"+PeerNode.peerID+"\n");
-                System.out.println("\n--------------Message created by peer with peer id----------------\n" + PeerNode.peerID);
-                System.out.println(Message.serializeMessage(newLookupRequest));
-                System.out.println("\n");
-
+                System.out.println("\n############## Message created for product request:"+newLookupRequest.getProductName()+
+                        " ##############\n");
                 synchronized (PeerNode.sharedRequestBuffer)
                 {
                     PeerNode.sharedRequestBuffer.offer(newLookupRequest);

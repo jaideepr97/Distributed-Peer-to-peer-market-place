@@ -121,7 +121,7 @@ public class Message {
 
     public static Message deserializeMessage(String s)
     {
-        System.out.println("Message:"+s+"\n");
+//        System.out.println("Message:"+s+"\n");
         Message m = new Message();
         String[] objArray = s.split("#");
         String[] list = objArray[2].split(",");

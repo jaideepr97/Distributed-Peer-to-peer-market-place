@@ -155,6 +155,8 @@ public class Server implements Runnable
 //                                    System.out.println("Server:"+peerID+", Adding to sharedTransactionBuffer.\n");
                                     PeerNode.sharedTransactionBuffer.offer(replyMessage);
                                 }
+                                System.out.println("\n#############Reply received from:"+ message.getDestinationSellerId()+
+                                        " for product:"+ message.getProductName()+"#############\n");
                             }
                             else {
 //                                System.out.println("Server:"+peerID+", This is not the originator, forwarding...\n");
@@ -178,6 +180,8 @@ public class Server implements Runnable
 //                                    System.out.println("\nDetails:Product:"+message.getProductName()+
 //                                            ", Buyer:"+message.getSourcePeerId()+", Seller:"+peerID+"\n");
                                 }
+                                outputStream = new DataOutputStream(clientSocket.getOutputStream());
+                                outputStream.writeBytes("0" + "\n");
                             }
                             break;
                     }
