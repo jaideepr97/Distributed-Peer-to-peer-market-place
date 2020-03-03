@@ -13,6 +13,7 @@ import java.net.Socket;
 //import main.java.Config;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,8 +23,8 @@ import java.util.concurrent.ConcurrentMap;
 public class PeerNode {
     //private static final String CONFIG_FILE_LOCATION = "/Users/aayushgupta/IdeaProjects/lab-1-rao-gupta/";
     //private static final String CONFIG_FILE_LOCATION = "/home/hadoopuser/Desktop/lab-1-rao-gupta/";
-    private static final String CONFIG_FILE_LOCATION = new File("").getAbsolutePath()+"/";
-    private static final String FILENAME = "FourNodes.txt";
+    private static String CONFIG_FILE_LOCATION = "";
+    private static String FILENAME = "FourNodes.txt";
 
     public static HashMap<Integer, String> productMap = new HashMap<>();
     private static Config config;
@@ -44,6 +45,7 @@ public class PeerNode {
 
         try {
             peerID = Integer.parseInt(args[0]);
+            FILENAME = args[1];
             setOutputFile();
             System.out.println("---------Starting peer with ID: "+ peerID+"----------\n");
             requestId = 0;
@@ -61,60 +63,67 @@ public class PeerNode {
             getRole();
             LookupRequestGenerator lookupRequestGenerator;
             Thread lookupRequestGeneratorThread;
+            List<Thread> serverThreads = new ArrayList<>();
+
             switch (role)
             {
                 case 0:
                     System.out.println("The peer with peerID:"+peerID+" is a buyer!\n");
-                    System.out.println("Starting server threads for peerID:"+peerID+"\n");
+                    //System.out.println("Starting server threads for peerID:"+peerID+"\n");
                     for (int i=0; i<config.getServerPorts().size(); i++)
                     {
                         Server server = new Server(config.getServerPorts().get(i), peerID, -1, -1);
                         Thread serverThread = new Thread(server);
                         serverThread.start();
+                        serverThreads.add(serverThread);
                     }
-                    System.out.println("Starting lookup requests for peerID:"+peerID+"\n");
+                    //System.out.println("Starting lookup requests for peerID:"+peerID+"\n");
                     lookupRequestGenerator = new LookupRequestGenerator();
                     lookupRequestGeneratorThread = new Thread(lookupRequestGenerator);
                     lookupRequestGeneratorThread.start();
                     break;
                 case 1:
                     System.out.println("The peer with peerID:"+peerID+" is a seller!\n");
-                    System.out.println("Setting Seller details for peerID:"+peerID+"\n");
+                    //System.out.println("Setting Seller details for peerID:"+peerID+"\n");
                     getSellDetails();
-                    System.out.println("Starting server threads for peerID:"+peerID+"\n");
+                    //System.out.println("Starting server threads for peerID:"+peerID+"\n");
                     for (int i=0; i<config.getServerPorts().size(); i++)
                     {
                         Server server = new Server(config.getServerPorts().get(i), peerID, productToSell, numberOfItems);
                         Thread serverThread = new Thread(server);
                         serverThread.start();
+                        serverThreads.add(serverThread);
                     }
                     break;
                 case 2:
                     System.out.println("The peer with peerID:"+peerID+" is a buyer and seller!\n");
-                    System.out.println("Setting Seller details for peerID:"+peerID+"\n");
+                    //System.out.println("Setting Seller details for peerID:"+peerID+"\n");
                     getSellDetails();
-                    System.out.println("Starting server threads for peerID:"+peerID+"\n");
+                    //System.out.println("Starting server threads for peerID:"+peerID+"\n");
                     for (int i=0; i<config.getServerPorts().size(); i++)
                     {
                         Server server = new Server(config.getServerPorts().get(i), peerID, productToSell, numberOfItems);
                         Thread serverThread = new Thread(server);
                         serverThread.start();
+                        serverThreads.add(serverThread);
                     }
-                    System.out.println("Starting lookup requests for peerID:"+peerID+"\n");
+                    //System.out.println("Starting lookup requests for peerID:"+peerID+"\n");
                     lookupRequestGenerator = new LookupRequestGenerator();
                     lookupRequestGeneratorThread = new Thread(lookupRequestGenerator);
                     lookupRequestGeneratorThread.start();
             }
-            while(running) {
+            long start = System.currentTimeMillis();
+            long end = start + 120*1000; // 60 seconds * 1000 ms/sec
+            while(System.currentTimeMillis() < end) {
                 synchronized (numberOfItems) {
                     if((role == 1 || role == 2) && numberOfItems <1) {
-                        System.out.println("Number of available items less than 1 for peerID:"+peerID+"\n");
+                        //System.out.println("Number of available items less than 1 for peerID:"+peerID+"\n");
                         getSellDetails();
                     }
                 }
                 synchronized (sharedRequestBuffer) {
                     if (sharedRequestBuffer.size() > 0) {
-                        System.out.println("Number of items in sharedRequestBuffer > 0 for peerID:"+peerID+"\n");
+                        //System.out.println("Number of items in sharedRequestBuffer > 0 for peerID:"+peerID+"\n");
                         Message m = sharedRequestBuffer.poll();
                         m.setHopCount(m.getHopCount()-1);
                         int lastNeighbourID = -1;
@@ -123,7 +132,7 @@ public class PeerNode {
                             lastNeighbourID = m.getMessagePath().get(m.getMessagePath().size()-1);
                         }
                         m.messagePath.add(peerID);
-                        System.out.println("Starting client threads for peerID:"+peerID+"\n");
+                        //System.out.println("Starting client threads for peerID:"+peerID+"\n");
                         for (int i = 0; i < config.getNeighborIDs().size(); i++) {
                             int port = config.getNeighborPorts().get(i);
                             if(lastNeighbourID == -1 || port != config.getPortMap().get(lastNeighbourID)) {
@@ -138,11 +147,11 @@ public class PeerNode {
                 }
                 synchronized (sharedReplyBuffer) {
                     if (sharedReplyBuffer.size() > 0) {
-                        System.out.println("Number of items in sharedReplyBuffer > 0 for peerID:"+peerID+"\n");
+                       // System.out.println("Number of items in sharedReplyBuffer > 0 for peerID:"+peerID+"\n");
                         Message m = sharedReplyBuffer.poll();
                         int destinationPeerId = m.messagePath.get(m.messagePath.size() - 1);
                         m.messagePath.remove(m.messagePath.size() -1);
-                        System.out.println("Starting client thread for peerID:"+peerID+"\n");
+                        //System.out.println("Starting client thread for peerID:"+peerID+"\n");
                         int port = config.getPortMap().get(destinationPeerId);
                         //System.out.println("\n--------"+port+"---------\n");
                         String host = getHostName(port);
@@ -154,11 +163,12 @@ public class PeerNode {
                 synchronized (sharedTransactionBuffer)
                 {
                     if (sharedTransactionBuffer.size() > 0) {
-                        System.out.println("Number of items in sharedTransactionBuffer > 0 for peerID:"+peerID+"\n");
+                        //System.out.println("Number of items in sharedTransactionBuffer > 0 for peerID:"+peerID+"\n");
                         Message m = sharedTransactionBuffer.poll();
                         int destinationPeerId = m.getDestinationSellerId();
                         System.out.println("-------------Starting buy process for buyer:"
-                                +peerID+"and seller:"+destinationPeerId+"-------------\n");
+                                +peerID+" and seller:"+destinationPeerId+" for product:"
+                                +productMap.getOrDefault(m.getProductId(), "")+" -------------\n");
                         int port = config.getPortMap().get(destinationPeerId);
                         String host = getHostName(port);
                         synchronized (servicedRequests)
@@ -169,13 +179,18 @@ public class PeerNode {
                                 Thread clientThread = new Thread(client);
                                 clientThread.start();
                             }
-                            else
-                            {
-                                System.out.println("Peer:"+peerID+", Buy request already serviced!\n");
-                            }
+//                            else
+//                            {
+//                                System.out.println("Peer:"+peerID+", Buy request already serviced!\n");
+//                            }
                         }
                     }
                 }
+            }
+            System.out.println("Main Thread stopped");
+            for (Thread t : serverThreads)
+            {
+                t.interrupt();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -210,7 +225,7 @@ public class PeerNode {
     public static void getSellDetails() {
         Random r = new Random();
         productToSell = r.nextInt((2 - 0) + 1);
-        System.out.println("ProductID to sell = "+productToSell+"\n");
+        System.out.println("Product to sell = "+productMap.getOrDefault(productToSell, "")+"\n");
         numberOfItems = 10;
     }
 
@@ -222,7 +237,7 @@ public class PeerNode {
             nextProductToBuy  = r.nextInt((2 - 0) + 1);;
         }while(nextProductToBuy == productToSell);
         productToBuy = nextProductToBuy;
-        System.out.println("ProductID to buy = "+productToBuy+"\n");
+        System.out.println("Product to buy = "+productMap.getOrDefault(productToBuy, "")+"\n");
         return nextProductToBuy;
     }
 
@@ -288,17 +303,15 @@ class LookupRequestGenerator implements Runnable {
                 Message newLookupRequest = new Message();
                 counter ++;
                 PeerNode.requestId += 1;
-                System.out.println("New request with ID:"+PeerNode.requestId+" for peerID:"+PeerNode.peerID+"\n");
+                //System.out.println("New request with ID:"+PeerNode.requestId+" for peerID:"+PeerNode.peerID+"\n");
                 newLookupRequest.setRequestId(PeerNode.requestId);
                 newLookupRequest.setHopCount(5);
                 newLookupRequest.setSourcePeerId(PeerNode.peerID);
                 newLookupRequest.setProductId(productId);
                 newLookupRequest.setType(0);
                 newLookupRequest.setProductName(PeerNode.productMap.get(productId));
-                System.out.println("Adding request with ID:"+PeerNode.requestId+" to the sharedRequestBuffer for peerID:"+PeerNode.peerID+"\n");
-
-                System.out.println("-----------------------------");
-                System.out.println("\nMessage created by peer with peer id \n" + PeerNode.peerID);
+                //System.out.println("Adding request with ID:"+PeerNode.requestId+" to the sharedRequestBuffer for peerID:"+PeerNode.peerID+"\n");
+                System.out.println("\n--------------Message created by peer with peer id----------------\n" + PeerNode.peerID);
                 System.out.println(Message.serializeMessage(newLookupRequest));
                 System.out.println("\n");
 
@@ -316,8 +329,10 @@ class LookupRequestGenerator implements Runnable {
                 e.printStackTrace();
                 stopThread();
             }
-            if(counter == 5)
+            if(counter == 5) {
+                System.out.println("\nRequest counter over\n");
                 stopThread();
+            }
 
 
         }
