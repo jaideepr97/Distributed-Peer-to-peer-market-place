@@ -32,7 +32,7 @@ public class Utilities {
         String fileName = "";
         switch (peers)
         {
-            case 2:
+            case 1:
                 portMap = new HashMap<>();
                 portMap.put(1, 5001);
                 portMap.put(2, 5003);
@@ -59,9 +59,9 @@ public class Utilities {
                         new HashMap<>(locationMap),
                         0);
                 configList.add(config);
-                fileName = "TwoNodes";
+                fileName = "Test1";
                 break;
-            case 4:
+            case 2:
                 portMap = new HashMap<>();
                 portMap.put(1, 5001);
                 portMap.put(2, 5005);
@@ -116,9 +116,9 @@ public class Utilities {
                         new HashMap<>(locationMap),
                         0);
                 configList.add(config);
-                fileName = "FourNodes";
+                fileName = "Test2";
                 break;
-            case 6:
+            case 3:
                 portMap = new HashMap<>();
                 portMap.put(1, 5002);
                 portMap.put(2, 5007);
@@ -199,9 +199,9 @@ public class Utilities {
                         new HashMap<>(locationMap),
                         0);
                 configList.add(config);
-                fileName = "SixNodes";
+                fileName = "Test3";
                 break;
-            case 8:
+            case 4:
                 portMap = new HashMap<>();
                 portMap.put(1, 5003);
                 portMap.put(2, 5007);
@@ -308,9 +308,9 @@ public class Utilities {
                         new HashMap<>(locationMap),
                         0);
                 configList.add(config);
-                fileName = "EightNodes";
+                fileName = "Test4";
                 break;
-            case 9:
+            case 5:
                 portMap = new HashMap<>();
                 portMap.put(1, 5001);
                 portMap.put(2, 5003);
@@ -428,9 +428,9 @@ public class Utilities {
                         new HashMap<>(locationMap),
                         0);
                 configList.add(config);
-                fileName = "NineNodes";
+                fileName = "Test5";
                 break;
-            case 7:
+            case 6:
                 portMap = new HashMap<>();
                 portMap.put(1, 5001);
                 portMap.put(2, 5004);
@@ -522,9 +522,9 @@ public class Utilities {
                         new HashMap<>(locationMap),
                         0);
                 configList.add(config);
-                fileName = "SevenNodes";
+                fileName = "Test6";
                 break;
-            case 12:
+            case 7:
                 portMap = new HashMap<>();
                 portMap.put(1, 5002);
                 portMap.put(2, 5007);
@@ -681,9 +681,9 @@ public class Utilities {
                         new HashMap<>(locationMap),
                         0);
                 configList.add(config);
-                fileName = "TwelveNodes";
+                fileName = "Test7";
             break;
-            case 17:
+            case 8:
                 portMap = new HashMap<>();
                 portMap.put(1, 5004);
                 portMap.put(2, 5009);
@@ -860,7 +860,275 @@ public class Utilities {
                         new HashMap<>(locationMap),
                         0);
                 configList.add(config);
-                fileName = "SeventeenNodes";
+                fileName = "Test8";
+                break;
+            case 9:
+                portMap = new HashMap<>();
+                portMap.put(1, 5002);
+                portMap.put(2, 5005);
+                portMap.put(3, 5030);
+                portMap.put(4, 5012);
+                portMap.put(5, 5016);
+                portMap.put(6, 5019);
+                portMap.put(7,5023);
+                portMap.put(8,5026);
+                portMap.put(9, 5029);
+                locationMap = new HashMap<>();
+                for(int i=0; i<=29; i++)
+                {
+                    locationMap.put(5000+i, 0);
+                }
+                // 1
+                config = new Config(1,
+                        new ArrayList<Integer>(Arrays.asList(5000,5001,5002)),
+                        new ArrayList<Integer>(Arrays.asList(5003,5006)),
+                        new ArrayList<Integer>( Arrays.asList(2,3)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                // 2
+                config = new Config(2,
+                        new ArrayList<Integer>(Arrays.asList(5003,5004,5005)),
+                        new ArrayList<Integer>(Arrays.asList(5000, 5007)),
+                        new ArrayList<Integer>( Arrays.asList(1,3)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                // 3
+                config = new Config(3,
+                        new ArrayList<Integer>(Arrays.asList(5006,5007,5008,5030)),
+                        new ArrayList<Integer>(Arrays.asList(5001,5004,5009)),
+                        new ArrayList<Integer>( Arrays.asList(1,2,4)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                // 4
+                config = new Config(4,
+                        new ArrayList<Integer>(Arrays.asList(5009,5010,5011,5012)),
+                        new ArrayList<Integer>(Arrays.asList(5008,5013,5017)),
+                        new ArrayList<Integer>( Arrays.asList(3,5,6)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                // 5
+                config = new Config(5,
+                        new ArrayList<Integer>(Arrays.asList(5013,5014,5015,5016)),
+                        new ArrayList<Integer>(Arrays.asList(5011,5018,5020)),
+                        new ArrayList<Integer>( Arrays.asList(4,6,7)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                // 6
+                config = new Config(6,
+                        new ArrayList<Integer>(Arrays.asList(5017,5018,5019)),
+                        new ArrayList<Integer>(Arrays.asList(5011,5014)),
+                        new ArrayList<Integer>( Arrays.asList(4,5)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                // 7
+                config = new Config(7,
+                        new ArrayList<Integer>(Arrays.asList(5020,5021,5022,5023)),
+                        new ArrayList<Integer>(Arrays.asList(5015,5024,5027)),
+                        new ArrayList<Integer>( Arrays.asList(5,8,9)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                // 8
+                config = new Config(8,
+                        new ArrayList<Integer>(Arrays.asList(5024,5025,5026)),
+                        new ArrayList<Integer>(Arrays.asList(5021,5028)),
+                        new ArrayList<Integer>( Arrays.asList(7,9)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                // 9
+                config = new Config(9,
+                        new ArrayList<Integer>(Arrays.asList(5027,5028,5029)),
+                        new ArrayList<Integer>(Arrays.asList(5022,5025)),
+                        new ArrayList<Integer>( Arrays.asList(7,8)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                fileName = "Test9";
+                break;
+            case 10:
+                portMap = new HashMap<>();
+                portMap.put(1, 5005);
+                portMap.put(2, 5011);
+                portMap.put(3, 5017);
+                portMap.put(4, 5023);
+                portMap.put(5, 5025);
+                portMap.put(6, 5027);
+                portMap.put(7,5029);
+                portMap.put(8,5031);
+                portMap.put(9, 5033);
+                portMap.put(10,5035);
+                portMap.put(11,5037);
+                portMap.put(12, 5039);
+                portMap.put(13, 5041);
+                portMap.put(14, 5043);
+                portMap.put(15, 5045);
+                portMap.put(16, 5047);
+                locationMap = new HashMap<>();
+                for(int i=0; i<=47; i++)
+                {
+                    locationMap.put(5000+i, 0);
+                }
+                // 1
+                config = new Config(1,
+                        new ArrayList<Integer>(Arrays.asList(5000,5001,5002,5003,5004,5005)),
+                        new ArrayList<Integer>(Arrays.asList(5006,5012,5042,5044,5046)),
+                        new ArrayList<Integer>( Arrays.asList(2,3,14,15,16)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                // 2
+                config = new Config(2,
+                        new ArrayList<Integer>(Arrays.asList(5006,5007,5008,5009,5010,5011)),
+                        new ArrayList<Integer>(Arrays.asList(5000,5018,5036,5038,5040)),
+                        new ArrayList<Integer>( Arrays.asList(1,4,11,12,13)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                // 3
+                config = new Config(3,
+                        new ArrayList<Integer>(Arrays.asList(5012,5013,5014,5015,5016,5017)),
+                        new ArrayList<Integer>(Arrays.asList(5001,5019,5030,5032,5034)),
+                        new ArrayList<Integer>( Arrays.asList(1,4,8,9,10)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                // 4
+                config = new Config(4,
+                        new ArrayList<Integer>(Arrays.asList(5018,5019,5020,5021,5022,5023)),
+                        new ArrayList<Integer>(Arrays.asList(5007,5013,5024,5026,5028)),
+                        new ArrayList<Integer>( Arrays.asList(2,3,5,6,7)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                // 5
+                config = new Config(5,
+                        new ArrayList<Integer>(Arrays.asList(5024,5025)),
+                        new ArrayList<Integer>(Arrays.asList(5020)),
+                        new ArrayList<Integer>( Arrays.asList(4)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                // 6
+                config = new Config(6,
+                        new ArrayList<Integer>(Arrays.asList(5026,5027)),
+                        new ArrayList<Integer>(Arrays.asList(5021)),
+                        new ArrayList<Integer>( Arrays.asList(4)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                // 7
+                config = new Config(7,
+                        new ArrayList<Integer>(Arrays.asList(5028,5029)),
+                        new ArrayList<Integer>(Arrays.asList(5022)),
+                        new ArrayList<Integer>( Arrays.asList(5)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                // 8
+                config = new Config(8,
+                        new ArrayList<Integer>(Arrays.asList(5030,5031)),
+                        new ArrayList<Integer>(Arrays.asList(5014)),
+                        new ArrayList<Integer>( Arrays.asList(3)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                // 9
+                config = new Config(9,
+                        new ArrayList<Integer>(Arrays.asList(5032,5033)),
+                        new ArrayList<Integer>(Arrays.asList(5015)),
+                        new ArrayList<Integer>( Arrays.asList(3)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                // 10
+                config = new Config(10,
+                        new ArrayList<Integer>(Arrays.asList(5034,5035)),
+                        new ArrayList<Integer>(Arrays.asList(5016)),
+                        new ArrayList<Integer>( Arrays.asList(3)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                // 11
+                config = new Config(11,
+                        new ArrayList<Integer>(Arrays.asList(5036,5037)),
+                        new ArrayList<Integer>(Arrays.asList(5008)),
+                        new ArrayList<Integer>( Arrays.asList(2)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                // 12
+                config = new Config(12,
+                        new ArrayList<Integer>(Arrays.asList(5038,5039)),
+                        new ArrayList<Integer>(Arrays.asList(5009)),
+                        new ArrayList<Integer>( Arrays.asList(2)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                // 13
+                config = new Config(13,
+                        new ArrayList<Integer>(Arrays.asList(5040,5041)),
+                        new ArrayList<Integer>(Arrays.asList(5010)),
+                        new ArrayList<Integer>( Arrays.asList(2)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                // 14
+                config = new Config(14,
+                        new ArrayList<Integer>(Arrays.asList(5042,5043)),
+                        new ArrayList<Integer>(Arrays.asList(5002)),
+                        new ArrayList<Integer>( Arrays.asList(1)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                // 15
+                config = new Config(15,
+                        new ArrayList<Integer>(Arrays.asList(5044,5045)),
+                        new ArrayList<Integer>(Arrays.asList(5003)),
+                        new ArrayList<Integer>( Arrays.asList(1)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                // 16
+                config = new Config(16,
+                        new ArrayList<Integer>(Arrays.asList(5046,5047)),
+                        new ArrayList<Integer>(Arrays.asList(5004)),
+                        new ArrayList<Integer>( Arrays.asList(1)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                fileName = "Test10";
                 break;
         }
         // create a new Gson instance

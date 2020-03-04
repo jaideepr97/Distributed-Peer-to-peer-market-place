@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Scanner;
 
 public class Message {
     private String productName;
@@ -123,6 +124,26 @@ public class Message {
     {
 //        System.out.println("Message:"+s+"\n");
         Message m = new Message();
+        /*
+        Scanner sc = new Scanner(s);
+        sc.useDelimiter("#");
+        m.setProductName(sc.next());
+        m.setProductId(Integer.parseInt(sc.next()));
+        List<Integer> tempList = new ArrayList();
+        Scanner sct = new Scanner(sc.next());
+        sct.useDelimiter(",");
+        while(sct.hasNext())
+        {
+            tempList.add(Integer.parseInt(sct.next()));
+        }
+        m.setMessagePath(tempList);
+        m.setHopCount(Integer.parseInt(sc.next()));
+        m.setType(Integer.parseInt(sc.next()));
+        m.setRequestId(Integer.parseInt(sc.next()));
+        m.setSourcePeerId(Integer.parseInt(sc.next()));
+        m.setDestinationSellerId(Integer.parseInt(sc.next()));
+        m.setDestinationSellerLocation(Integer.parseInt(sc.next()));
+        */
         String[] objArray = s.split("#");
         String[] list = objArray[2].split(",");
         m.setProductName(objArray[0]);

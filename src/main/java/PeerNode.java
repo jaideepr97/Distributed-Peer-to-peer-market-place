@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PeerNode {
     //private static final String CONFIG_FILE_LOCATION = "/Users/aayushgupta/IdeaProjects/lab-1-rao-gupta/";
@@ -72,7 +73,7 @@ public class PeerNode {
                     //System.out.println("Starting server threads for peerID:"+peerID+"\n");
                     for (int i=0; i<config.getServerPorts().size(); i++)
                     {
-                        Server server = new Server(config.getServerPorts().get(i), peerID, -1, -1);
+                        Server server = new Server(config.getServerPorts().get(i), peerID, -1);
                         Thread serverThread = new Thread(server);
                         serverThread.start();
                         serverThreads.add(serverThread);
@@ -89,7 +90,7 @@ public class PeerNode {
                     //System.out.println("Starting server threads for peerID:"+peerID+"\n");
                     for (int i=0; i<config.getServerPorts().size(); i++)
                     {
-                        Server server = new Server(config.getServerPorts().get(i), peerID, productToSell, numberOfItems);
+                        Server server = new Server(config.getServerPorts().get(i), peerID, productToSell);
                         Thread serverThread = new Thread(server);
                         serverThread.start();
                         serverThreads.add(serverThread);
@@ -102,7 +103,7 @@ public class PeerNode {
                     //System.out.println("Starting server threads for peerID:"+peerID+"\n");
                     for (int i=0; i<config.getServerPorts().size(); i++)
                     {
-                        Server server = new Server(config.getServerPorts().get(i), peerID, productToSell, numberOfItems);
+                        Server server = new Server(config.getServerPorts().get(i), peerID, productToSell);
                         Thread serverThread = new Thread(server);
                         serverThread.start();
                         serverThreads.add(serverThread);
