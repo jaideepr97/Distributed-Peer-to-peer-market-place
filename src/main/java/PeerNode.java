@@ -166,7 +166,7 @@ public class PeerNode {
                         //System.out.println("Number of items in sharedTransactionBuffer > 0 for peerID:"+peerID+"\n");
                         Message m = sharedTransactionBuffer.poll();
                         int destinationPeerId = m.getDestinationSellerId();
-                        System.out.println("-------------Starting buy process for buyer:"
+                        System.out.println("\n-------------Starting buy process for buyer:"
                                 +peerID+" and seller:"+destinationPeerId+" for product:"
                                 +productMap.getOrDefault(m.getProductId(), "")+" -------------\n");
                         int port = config.getPortMap().get(destinationPeerId);

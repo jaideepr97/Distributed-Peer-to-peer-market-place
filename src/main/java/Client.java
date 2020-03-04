@@ -125,8 +125,8 @@ public class Client implements Runnable, P2PBuyerInterface
             String ack = bufferedReader.readLine();
             if(ack.equals("0"))
             {
-                System.out.println("-------Bought product:"+message.getProductName()+
-                        " from seller:"+message.getDestinationSellerId()+"------------");
+                System.out.println("\n-------Bought product:"+message.getProductName()+
+                        " from seller:"+message.getDestinationSellerId()+"------------\n");
             }
 
         } catch (IOException e) {
