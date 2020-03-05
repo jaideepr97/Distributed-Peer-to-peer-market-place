@@ -1197,19 +1197,19 @@ public class Utilities {
                 portMap.put(2, 5001);
                 portMap.put(3, 5002);
                 portMap.put(4, 5003);
-                portMap.put(5, 5004);
-                portMap.put(6, 5005);
+                portMap.put(5, 9000);
+                portMap.put(6, 9001);
                 locationMap = new HashMap<>();
                 locationMap.put(5000,1);
                 locationMap.put(5001,1);
                 locationMap.put(5002,2);
                 locationMap.put(5003,2);
-                locationMap.put(5004,3);
-                locationMap.put(5004,3);
+                locationMap.put(9000,3);
+                locationMap.put(9001,3);
                 // 1
                 config = new Config(1,
                         new ArrayList<Integer>(Arrays.asList(5000)),
-                        new ArrayList<Integer>(Arrays.asList(5001,5005)),
+                        new ArrayList<Integer>(Arrays.asList(5001,9001)),
                         new ArrayList<Integer>( Arrays.asList(2,6)),
                         new HashMap<>(portMap),
                         new HashMap<>(locationMap),
@@ -1236,7 +1236,7 @@ public class Utilities {
                 //4
                 config = new Config(4,
                         new ArrayList<Integer>(Arrays.asList(5003)),
-                        new ArrayList<Integer>(Arrays.asList(5002,5004)),
+                        new ArrayList<Integer>(Arrays.asList(5002,9000)),
                         new ArrayList<Integer>( Arrays.asList(3,5)),
                         new HashMap<>(portMap),
                         new HashMap<>(locationMap),
@@ -1244,8 +1244,8 @@ public class Utilities {
                 configList.add(config);
                 //5
                 config = new Config(5,
-                        new ArrayList<Integer>(Arrays.asList(5004)),
-                        new ArrayList<Integer>(Arrays.asList(5003,5005)),
+                        new ArrayList<Integer>(Arrays.asList(9000)),
+                        new ArrayList<Integer>(Arrays.asList(5003,9001)),
                         new ArrayList<Integer>( Arrays.asList(6,4)),
                         new HashMap<>(portMap),
                         new HashMap<>(locationMap),
@@ -1253,8 +1253,8 @@ public class Utilities {
                 configList.add(config);
                 //6
                 config = new Config(6,
-                        new ArrayList<Integer>(Arrays.asList(5005)),
-                        new ArrayList<Integer>(Arrays.asList(5000,5004)),
+                        new ArrayList<Integer>(Arrays.asList(9001)),
+                        new ArrayList<Integer>(Arrays.asList(5000,9000)),
                         new ArrayList<Integer>( Arrays.asList(1,5)),
                         new HashMap<>(portMap),
                         new HashMap<>(locationMap),

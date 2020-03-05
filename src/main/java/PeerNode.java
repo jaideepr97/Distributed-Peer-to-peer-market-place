@@ -242,11 +242,11 @@ public class PeerNode {
     public String getHostName(int port)
     {
         String host = "";
-        if(this.config.getLocation() ==  this.config.getLocationMap().get(port))
-        {
-            host = "localhost";
-        }
-        else if(this.config.getLocationMap().get(port) == 1)
+//        if(this.config.getLocation() ==  this.config.getLocationMap().get(port))
+//        {
+//            host = "localhost";
+//        }
+        if(this.config.getLocationMap().get(port) == 1)
         {
             host = "elnux7.cs.umass.edu";
         }
