@@ -8,6 +8,8 @@ import java.util.*;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -31,6 +33,8 @@ public class PeerNode {
     public static ConcurrentLinkedQueue<Message> sharedReplyBuffer = new ConcurrentLinkedQueue<>();
     public static ConcurrentLinkedQueue<Message> sharedTransactionBuffer = new ConcurrentLinkedQueue<>();
     public static ConcurrentHashMap<Integer, Integer> servicedRequests = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<Integer, ResponseTimeTracker> ResponseTimeMap = new ConcurrentHashMap<>();
+
 
     public int getPeerID() {
         return peerID;
@@ -149,6 +153,7 @@ public class PeerNode {
                                 Client client = new Client(host, port, peer.peerID, m, -1);
                                 Thread clientThread = new Thread(client);
                                 clientThread.start();
+
                             }
                         }
                     }
@@ -166,6 +171,8 @@ public class PeerNode {
                         Client client = new Client(host, port, peer.peerID, m, destinationPeerId);
                         Thread clientThread = new Thread(client);
                         clientThread.start();
+
+
                     }
                 }
                 synchronized (sharedTransactionBuffer)
@@ -186,6 +193,8 @@ public class PeerNode {
                                 Client client = new Client(host, port, peer.peerID, m, -1);
                                 Thread clientThread = new Thread(client);
                                 clientThread.start();
+
+
                             }
                         }
                     }
@@ -197,6 +206,28 @@ public class PeerNode {
             {
                 t.interrupt();
             }
+
+            long averageRequestResponseTime =  0L;
+
+            synchronized (ResponseTimeMap) {
+                if(ResponseTimeMap.size() > 0) {
+                    System.out.println("RequestId\t\t\t\tAverage Response Time");
+                    for(Map.Entry<Integer, ResponseTimeTracker> entry: ResponseTimeMap.entrySet()) {
+                        long totalResponseTime = 0L;
+                        for(Long t: entry.getValue().responseTimes) {
+                            totalResponseTime += t-entry.getValue().getCreationTime();
+                        }
+                        if(entry.getValue().responseTimes.size() > 0)
+                            totalResponseTime = totalResponseTime/(entry.getValue().responseTimes.size());
+                        averageRequestResponseTime += totalResponseTime;
+                        System.out.println(entry.getKey()+"\t\t\t\t" + totalResponseTime);
+                    }
+                    averageRequestResponseTime = averageRequestResponseTime/ResponseTimeMap.size();
+                    System.out.println("Average response time across all lookup requests: " + averageRequestResponseTime);
+                }
+            }
+
+
             System.exit(0);
         } catch (Exception e) {
             e.printStackTrace();
@@ -211,18 +242,21 @@ public class PeerNode {
     public String getHostName(int port)
     {
         String host = "";
-        if(this.config.getLocation() == 0 && this.config.getLocationMap().get(port) == 0)
+        if(this.config.getLocation() ==  this.config.getLocationMap().get(port))
         {
             host = "localhost";
         }
-        else if((this.config.getLocation() == 0 && this.config.getLocationMap().get(port) == 1) ||
-                (this.config.getLocation() == 1 && this.config.getLocationMap().get(port) == 1))
+        else if(this.config.getLocationMap().get(port) == 1)
         {
             host = "elnux7.cs.umass.edu";
         }
-        else if(this.config.getLocation() == 1 && this.config.getLocationMap().get(port) == 0)
+        else if(this.config.getLocationMap().get(port) == 2)
         {
-            host = "172.30.132.77";
+            host = "elnux1.cs.umass.edu";
+        }
+        else if(this.config.getLocationMap().get(port) == 3)
+        {
+            host = "elnux2.cs.umass.edu";
         }
         return host;
     }
@@ -354,6 +388,15 @@ class LookupRequestGenerator implements Runnable {
                 //Adding request  to the sharedRequestBuffer for the peer
                 System.out.println("\n############## Message created for product request:"+newLookupRequest.getProductName()+
                         " ##############\n");
+                synchronized (PeerNode.ResponseTimeMap) {
+                    Calendar c1 = Calendar.getInstance();
+                    Date dateOne = c1.getTime();
+                    ResponseTimeTracker timeTracker = new ResponseTimeTracker();
+                    timeTracker.setCreationTime(dateOne.getTime());
+                    PeerNode.ResponseTimeMap.put(peer.getRequestId(), timeTracker);
+
+                }
+
                 synchronized (PeerNode.sharedRequestBuffer)
                 {
                     PeerNode.sharedRequestBuffer.offer(newLookupRequest);

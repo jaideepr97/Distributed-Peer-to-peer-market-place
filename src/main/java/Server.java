@@ -1,6 +1,8 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -17,7 +19,7 @@ public class Server implements Runnable
     BufferedReader bufferedReader ;
     DataOutputStream outputStream ;
     volatile boolean running;
-    private ExecutorService executor = Executors.newFixedThreadPool(15);
+    private ExecutorService executor = Executors.newFixedThreadPool(3);
     public Server(int _port, PeerNode _peer, int _productToSell)
     {
         this.port = _port;
@@ -39,7 +41,9 @@ public class Server implements Runnable
                 //Server, Listening........
                 clientSocket = serverSocket.accept();
                 ServerExecutor serverExecutor = new ServerExecutor(peer, clientSocket);
-                executor.submit(serverExecutor);
+//                executor.submit(serverExecutor);
+                Thread serverThread = new Thread(serverExecutor);
+                serverThread.start();
             }
             catch (IOException e)
             {
@@ -89,6 +93,16 @@ class ServerExecutor implements Runnable
                 synchronized (PeerNode.requestHistory)
                 {
                     if(PeerNode.requestHistory.keySet().contains(message) ) {
+
+                        if(message.getType() == 1 && message.getSourcePeerId() == peer.getPeerID()) {
+                            synchronized (PeerNode.ResponseTimeMap) {
+                                Calendar c1 = Calendar.getInstance();
+                                Date dateOne = c1.getTime();
+                                PeerNode.ResponseTimeMap.get(message.getRequestId()).responseTimes.add(dateOne.getTime());
+                            }
+                        }
+
+
                         return;
                     }
                 }
@@ -146,6 +160,14 @@ class ServerExecutor implements Runnable
                             replyMessage.setProductId(message.getProductId());
                             replyMessage.setHopCount(0);
                             replyMessage.setProductName(message.getProductName());
+
+                            synchronized (PeerNode.ResponseTimeMap) {
+                                Calendar c1 = Calendar.getInstance();
+                                Date dateOne = c1.getTime();
+                                PeerNode.ResponseTimeMap.get(message.getRequestId()).responseTimes.add(dateOne.getTime());
+                            }
+
+
                             synchronized (PeerNode.sharedTransactionBuffer) {
                                 //Server, Adding to sharedTransactionBuffer.
                                 PeerNode.sharedTransactionBuffer.offer(replyMessage);
