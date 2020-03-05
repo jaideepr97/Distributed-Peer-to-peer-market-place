@@ -132,26 +132,25 @@ public class Message {
     {
 //        System.out.println("Message:"+s+"\n");
         Message m = new Message();
-        /*
         Scanner sc = new Scanner(s);
         sc.useDelimiter("#");
         m.setProductName(sc.next());
-        m.setProductId(Integer.parseInt(sc.next()));
+        m.setProductId(sc.nextInt());
         List<Integer> tempList = new ArrayList();
         Scanner sct = new Scanner(sc.next());
         sct.useDelimiter(",");
         while(sct.hasNext())
         {
-            tempList.add(Integer.parseInt(sct.next()));
+            tempList.add(sct.nextInt());
         }
         m.setMessagePath(tempList);
-        m.setHopCount(Integer.parseInt(sc.next()));
-        m.setType(Integer.parseInt(sc.next()));
-        m.setRequestId(Integer.parseInt(sc.next()));
-        m.setSourcePeerId(Integer.parseInt(sc.next()));
-        m.setDestinationSellerId(Integer.parseInt(sc.next()));
-        m.setDestinationSellerLocation(Integer.parseInt(sc.next()));
-        */
+        m.setHopCount(sc.nextInt());
+        m.setType(sc.nextInt());
+        m.setRequestId(sc.nextInt());
+        m.setSourcePeerId(sc.nextInt());
+        m.setDestinationSellerId(sc.nextInt());
+        m.setDestinationSellerLocation(sc.nextInt());
+        /*
         String[] objArray = s.split("#");
         String[] list = objArray[2].split(",");
         m.setProductName(objArray[0]);
@@ -170,6 +169,7 @@ public class Message {
         m.setSourcePeerId(Integer.parseInt(objArray[6]));
         m.setDestinationSellerId(Integer.parseInt(objArray[7]));
         m.setDestinationSellerLocation(Integer.parseInt(objArray[8]));
+         */
         return m;
     }
 

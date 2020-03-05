@@ -141,7 +141,7 @@ public class Utilities {
                 config = new Config(1,
                         new ArrayList<Integer>(Arrays.asList(5000,5001,5002)),
                         new ArrayList<Integer>(Arrays.asList(5026,5005)),
-                        new ArrayList<Integer>( Arrays.asList(2,5)),
+                        new ArrayList<Integer>( Arrays.asList(2,6)),
                         new HashMap<>(portMap),
                         new HashMap<>(locationMap),
                         0);
@@ -1121,6 +1121,75 @@ public class Utilities {
                         0);
                 configList.add(config);
                 fileName = "Test10";
+                break;
+            case 11:
+                portMap = new HashMap<>();
+                portMap.put(1, 5000);
+                portMap.put(2, 5001);
+                portMap.put(3, 5002);
+                portMap.put(4, 5003);
+                portMap.put(5, 5004);
+                portMap.put(6, 5005);
+                locationMap = new HashMap<>();
+                for(int i=0; i<=5; i++)
+                {
+                    locationMap.put(5000+i, 0);
+                }
+                // 1
+                config = new Config(1,
+                        new ArrayList<Integer>(Arrays.asList(5000)),
+                        new ArrayList<Integer>(Arrays.asList(5001,5005)),
+                        new ArrayList<Integer>( Arrays.asList(2,6)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                // 2
+                config = new Config(2,
+                        new ArrayList<Integer>(Arrays.asList(5001)),
+                        new ArrayList<Integer>(Arrays.asList(5000,5002)),
+                        new ArrayList<Integer>( Arrays.asList(1,3)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                //3
+                config = new Config(3,
+                        new ArrayList<Integer>(Arrays.asList(5002)),
+                        new ArrayList<Integer>(Arrays.asList(5001,5003)),
+                        new ArrayList<Integer>( Arrays.asList(2,4)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                //4
+                config = new Config(4,
+                        new ArrayList<Integer>(Arrays.asList(5003)),
+                        new ArrayList<Integer>(Arrays.asList(5002,5004)),
+                        new ArrayList<Integer>( Arrays.asList(3,5)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                //5
+                config = new Config(5,
+                        new ArrayList<Integer>(Arrays.asList(5004)),
+                        new ArrayList<Integer>(Arrays.asList(5003,5005)),
+                        new ArrayList<Integer>( Arrays.asList(6,4)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                //6
+                config = new Config(6,
+                        new ArrayList<Integer>(Arrays.asList(5005)),
+                        new ArrayList<Integer>(Arrays.asList(5000,5004)),
+                        new ArrayList<Integer>( Arrays.asList(1,5)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                fileName = "Test11";
                 break;
         }
         Gson gson = new Gson();

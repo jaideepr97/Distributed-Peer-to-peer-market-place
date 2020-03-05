@@ -173,6 +173,7 @@ public class PeerNode {
                         }
                     }
                 }
+                Thread.sleep(1);
             }
             System.out.println("Main Thread stopped");
             for (Thread t : serverThreads)

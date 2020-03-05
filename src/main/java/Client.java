@@ -93,6 +93,9 @@ public class Client implements Runnable, P2PInterface
                 System.out.println("Client:"+peerId+", Exception in run():\n");
                 e.printStackTrace();
             }
+            finally {
+                this.stopThread();
+            }
         }
 
     }
