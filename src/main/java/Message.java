@@ -3,6 +3,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
+/**
+ * This class defines the fields for the message which is passed between the peers
+ */
 public class Message {
     private String productName;
     private int productId;
@@ -120,6 +123,11 @@ public class Message {
         return Objects.hash(requestId, sourcePeerId, type);
     }
 
+    /**
+     * This method is used to deserialize a message
+     * @param s - The serialized message
+     * @return - The Message object
+     */
     public static Message deserializeMessage(String s)
     {
 //        System.out.println("Message:"+s+"\n");
@@ -164,6 +172,12 @@ public class Message {
         m.setDestinationSellerLocation(Integer.parseInt(objArray[8]));
         return m;
     }
+
+    /**
+     * This method is used to serialize a Message object
+     * @param m - The Message object
+     * @return - The serialized message
+     */
     public static String serializeMessage(Message m)
     {
         StringBuilder sb = new StringBuilder();

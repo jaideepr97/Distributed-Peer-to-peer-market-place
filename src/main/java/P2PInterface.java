@@ -1,5 +1,5 @@
 //package main.java;
-public interface P2PBuyerInterface {
+public interface P2PInterface {
 
     /** This method would search the network for the buyers
      * @param productName - Contains the product name that the buyer needs to buy

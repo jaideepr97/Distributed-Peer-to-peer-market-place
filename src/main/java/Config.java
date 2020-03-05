@@ -1,7 +1,9 @@
-//package main.java;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * This class defines the fields for the config file, which are serialized into a string
+ */
 public class Config {
 
     private int peerID;

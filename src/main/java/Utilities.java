@@ -1,29 +1,21 @@
 import com.google.gson.Gson;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.Instant;
 import java.util.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This class is used to create configurations for the different test cases
+ */
 public class Utilities {
 
     public static void main(String[] args) {
         populateTestTopologyConfig(Integer.parseInt(args[0]));
     }
 
-    public static void pathTest()
-    {
-        String filePath = new File("").getAbsolutePath();
-        System.out.println(filePath);
-        filePath.concat("path to the property file");
-
-    }
     public static void populateTestTopologyConfig(int peers) {
         List<Config> configList = new ArrayList<>();
         HashMap<Integer, Integer> portMap;
@@ -1131,11 +1123,8 @@ public class Utilities {
                 fileName = "Test10";
                 break;
         }
-        // create a new Gson instance
         Gson gson = new Gson();
-        // convert your list to json
         String jsonString = gson.toJson(configList);
-        // print your generated json
         try
         {
             FileWriter f = new FileWriter(fileName+".txt");
@@ -1148,14 +1137,4 @@ public class Utilities {
         }
 
     }
-    public static void test() throws InterruptedException
-    {
-        long ut1 = Instant.now().getEpochSecond();
-        Thread.sleep(1000);
-        long ut2 = Instant.now().getEpochSecond();
-        System.out.println(ut2-ut1);
-
-    }
-
-
 }
