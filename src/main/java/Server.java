@@ -10,7 +10,7 @@ import java.util.concurrent.Executors;
 public class Server implements Runnable
 {
     int port;
-    int peerID;
+    PeerNode peer;
     int productToSell;
     ServerSocket serverSocket ;
     Socket clientSocket ;
@@ -18,10 +18,10 @@ public class Server implements Runnable
     DataOutputStream outputStream ;
     volatile boolean running;
     private ExecutorService executor = Executors.newFixedThreadPool(15);
-    public Server(int _port, int _peerID, int _productToSell)
+    public Server(int _port, PeerNode _peer, int _productToSell)
     {
         this.port = _port;
-        this.peerID = _peerID;
+        this.peer = _peer;
         this.productToSell = _productToSell;
         running = true;
     }
@@ -38,12 +38,12 @@ public class Server implements Runnable
             {
                 //Server, Listening........
                 clientSocket = serverSocket.accept();
-                ServerExecutor serverExecutor = new ServerExecutor(peerID, clientSocket);
+                ServerExecutor serverExecutor = new ServerExecutor(peer, clientSocket);
                 executor.submit(serverExecutor);
             }
             catch (IOException e)
             {
-                System.out.println("Server:"+peerID+", Exception in listen():\n");
+                System.out.println("Server:"+peer.getPeerID()+", Exception in listen():\n");
                 e.printStackTrace();
             }
         }
@@ -59,7 +59,7 @@ public class Server implements Runnable
         }
         catch(Exception e)
         {
-            System.out.println("Server:"+this.peerID+", Exception in run():\n");
+            System.out.println("Server:"+peer.getPeerID()+", Exception in run():\n");
             e.printStackTrace();
         }
 
@@ -68,12 +68,11 @@ public class Server implements Runnable
 
 class ServerExecutor implements Runnable
 {
-    int peerID;
+    PeerNode peer;
     Socket clientSocket;
-
-    public ServerExecutor(int _peerID, Socket _clientSocket)
+    public ServerExecutor(PeerNode _peer, Socket _clientSocket)
     {
-        this.peerID = _peerID;
+        this.peer = _peer;
         this.clientSocket = _clientSocket;
     }
     @Override
@@ -99,12 +98,12 @@ class ServerExecutor implements Runnable
                 switch(message.getType()) {
                     case 0:
                         //Server, Request Type 0
-                        if((PeerNode.role == 1 || PeerNode.role == 2) &&
-                                message.getProductId() == PeerNode.productToSell) {
+                        if((peer.getRole() == 1 || peer.getRole() == 2) &&
+                                message.getProductId() == peer.getProductToSell()) {
                             //Server, Seller has the product!
                             Message replyMessage = new Message();
-                            replyMessage.setDestinationSellerId(this.peerID);
-                            replyMessage.setProductName(PeerNode.productMap.get(message.getProductId()));
+                            replyMessage.setDestinationSellerId(peer.getPeerID());
+                            replyMessage.setProductName(peer.productMap.get(message.getProductId()));
                             replyMessage.setType(1);
                             replyMessage.setSourcePeerId(message.getSourcePeerId());
                             replyMessage.setMessagePath(message.getMessagePath());
@@ -119,7 +118,7 @@ class ServerExecutor implements Runnable
                             }
                         }
                         else {
-                            if(PeerNode.role == 0)
+                            if(peer.getRole() == 0)
                             {
                                 //Server is not a seller, forwarding...
                             }
@@ -135,11 +134,11 @@ class ServerExecutor implements Runnable
                         break;
                     case 1:
                         //Server, Request Type 1
-                        if(message.getSourcePeerId() == this.peerID) {
+                        if(message.getSourcePeerId() == peer.getPeerID()) {
                             //Server, This is the request originator!
                             Message replyMessage = new Message();
                             replyMessage.setDestinationSellerId(message.getDestinationSellerId());
-                            replyMessage.setProductName(PeerNode.productMap.get(message.getProductId()));
+                            replyMessage.setProductName(peer.productMap.get(message.getProductId()));
                             replyMessage.setType(2);
                             replyMessage.setSourcePeerId(message.getSourcePeerId());
                             replyMessage.setMessagePath(message.getMessagePath());
@@ -171,7 +170,7 @@ class ServerExecutor implements Runnable
                                 int newNumberOfItems = PeerNode.numberOfItems.decrementAndGet();
                                 System.out.println("\n----------Product:"+message.getProductName()
                                         +" sold!! Buyer:"+message.getSourcePeerId()+", Seller:"
-                                        +peerID+" -------------\n");
+                                        +peer.getPeerID()+" -------------\n");
                                 outputStream.writeBytes("0" + "\n");
                             }
                             else
