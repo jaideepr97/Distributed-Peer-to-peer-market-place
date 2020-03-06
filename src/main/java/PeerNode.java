@@ -80,46 +80,42 @@ public class PeerNode {
 
             switch (peer.role)
             {
-                case 0:
+                case 0: // Peer is only a buyer
                     System.out.println("The peer with peerID:"+peer.peerID+" is a buyer!\n");
-                    //Starting server threads for the peer
-                    for (int i=0; i<peer.config.getServerPorts().size(); i++)
-                    {
-                        Server server = new Server(peer.config.getServerPorts().get(i), peer, -1);
-                        Thread serverThread = new Thread(server);
-                        serverThread.start();
-                        serverThreads.add(serverThread);
-                    }
+                    //Starting server thread for the peer
+
+                    Server server = new Server(peer.config.getServerPort(), peer, -1);
+                    Thread serverThread = new Thread(server);
+                    serverThread.start();
+                    serverThreads.add(serverThread);
+
+
                     //Starting lookup requests for the peer
                     lookupRequestGenerator = new LookupRequestGenerator(peer);
                     lookupRequestGeneratorThread = new Thread(lookupRequestGenerator);
                     lookupRequestGeneratorThread.start();
                     break;
-                case 1:
+                case 1:     //Peer is only a seller
                     System.out.println("The peer with peerID:"+peer.peerID+" is a seller!\n");
                     //Setting Seller details for the peer
                     peer.getSellDetails();
                     //Starting server threads for the peer
-                    for (int i=0; i<peer.config.getServerPorts().size(); i++)
-                    {
-                        Server server = new Server(peer.config.getServerPorts().get(i), peer, peer.productToSell);
-                        Thread serverThread = new Thread(server);
-                        serverThread.start();
-                        serverThreads.add(serverThread);
-                    }
+                    Server PeerServer = new Server(peer.config.getServerPort(), peer, -1);
+                    Thread PeerServerThread = new Thread(PeerServer);
+                    PeerServerThread.start();
+                    serverThreads.add(PeerServerThread);
                     break;
-                case 2:
+                case 2:     //Peer is both buyer and seller
                     System.out.println("The peer with peerID:"+peer.peerID+" is a buyer and seller!\n");
                     //Setting Seller details for the peer
                     peer.getSellDetails();
                     //Starting server threads for the peer
-                    for (int i=0; i<peer.config.getServerPorts().size(); i++)
-                    {
-                        Server server = new Server(peer.config.getServerPorts().get(i), peer, peer.productToSell);
-                        Thread serverThread = new Thread(server);
-                        serverThread.start();
-                        serverThreads.add(serverThread);
-                    }
+
+                    Server CurrentPeerServer = new Server(peer.config.getServerPort(), peer, -1);
+                    Thread CurrentPeerServerThread = new Thread(CurrentPeerServer);
+                    CurrentPeerServerThread.start();
+                    serverThreads.add(CurrentPeerServerThread);
+
                     //Starting lookup requests for the peer
                     lookupRequestGenerator = new LookupRequestGenerator(peer);
                     lookupRequestGeneratorThread = new Thread(lookupRequestGenerator);
@@ -242,21 +238,28 @@ public class PeerNode {
     public String getHostName(int port)
     {
         String host = "";
-//        if(this.config.getLocation() ==  this.config.getLocationMap().get(port))
-//        {
-//            host = "localhost";
-//        }
-        if(this.config.getLocationMap().get(port) == 1)
+
+        if(this.config.getLocationMap().get(port) == 0)
         {
-            host = "elnux7.cs.umass.edu";
+            host = "localhost";
         }
-        else if(this.config.getLocationMap().get(port) == 2)
+
+        if(this.config.getLocationMap().get(port) == 1)
         {
             host = "elnux1.cs.umass.edu";
         }
-        else if(this.config.getLocationMap().get(port) == 3)
+        else if(this.config.getLocationMap().get(port) == 2)
         {
             host = "elnux2.cs.umass.edu";
+        }
+        else if(this.config.getLocationMap().get(port) == 3)
+        {
+            host = "elnux3.cs.umass.edu";
+        }
+
+        else if(this.config.getLocationMap().get(port) == 7)
+        {
+            host = "elnux7.cs.umass.edu";
         }
         return host;
     }

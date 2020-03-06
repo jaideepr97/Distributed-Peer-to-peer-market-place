@@ -1,0 +1,106 @@
+---------Starting peer with ID: 5----------
+
+Getting Config for peerID:5
+
+Getting role details for peerID:5
+
+The peer with peerID:5 is a buyer and seller!
+
+
+############### Product to sell = Salt ###############
+
+
+----------Product:Salt sold!! Buyer:4, Seller:5 -------------
+
+
+----------Product:Salt sold!! Buyer:6, Seller:5 -------------
+
+
+----------Product:Salt sold!! Buyer:1, Seller:5 -------------
+
+
+############## Message created for product request:Fish ##############
+
+
+#############Reply received from:2 for product:Fish#############
+
+
+-------------Starting buy process for buyer:5 and seller:2 for product:Fish -------------
+
+
+-------Bought product:Fish from seller:2------------
+
+
+----------Product:Salt sold!! Buyer:3, Seller:5 -------------
+
+
+############## Message created for product request:Fish ##############
+
+
+#############Reply received from:7 for product:Fish#############
+
+
+-------------Starting buy process for buyer:5 and seller:7 for product:Fish -------------
+
+
+-------Bought product:Fish from seller:7------------
+
+
+----------Product:Salt sold!! Buyer:4, Seller:5 -------------
+
+
+----------Product:Salt sold!! Buyer:3, Seller:5 -------------
+
+
+----------Product:Salt sold!! Buyer:1, Seller:5 -------------
+
+
+############## Message created for product request:Fish ##############
+
+
+-------------Starting buy process for buyer:5 and seller:7 for product:Fish -------------
+
+
+#############Reply received from:7 for product:Fish#############
+
+
+-------Bought product:Fish from seller:7------------
+
+
+----------Product:Salt sold!! Buyer:4, Seller:5 -------------
+
+
+----------Product:Salt sold!! Buyer:1, Seller:5 -------------
+
+
+############## Message created for product request:Fish ##############
+
+
+#############Reply received from:7 for product:Fish#############
+
+
+-------------Starting buy process for buyer:5 and seller:7 for product:Fish -------------
+
+
+-------Bought product:Fish from seller:7------------
+
+
+----------Product:Salt sold!! Buyer:3, Seller:5 -------------
+
+
+############### Product to sell = Boar ###############
+
+
+############## Message created for product request:Salt ##############
+
+
+Request counter over
+
+Main Thread stopped
+RequestId				Average Response Time
+1				192
+2				133
+3				69
+4				51
+5				0
+Average response time across all lookup requests: 89

@@ -7,7 +7,7 @@ import java.util.List;
 public class Config {
 
     private int peerID;
-    private List<Integer> serverPorts;
+    private int serverPort;
     private List<Integer> neighborPorts;
     private List<Integer> neighborIDs;
     private HashMap<Integer, Integer> portMap;
@@ -23,7 +23,7 @@ public class Config {
     }
 
     public Config(int _peerID,
-                  List<Integer> _serverPorts,
+                  int _serverPort,
                   List<Integer> _neighborPorts,
                   List<Integer> _neighborIDs,
                   HashMap<Integer, Integer> _portMap,
@@ -31,7 +31,7 @@ public class Config {
                   int _location)
     {
         this.peerID = _peerID;
-        this.serverPorts = _serverPorts;
+        this.serverPort = _serverPort;
         this.neighborPorts = _neighborPorts;
         this.neighborIDs = _neighborIDs;
         this.portMap = _portMap;
@@ -69,12 +69,12 @@ public class Config {
         this.neighborPorts = neighborPorts;
     }
 
-    public List<Integer> getServerPorts() {
-        return serverPorts;
+    public int getServerPort() {
+        return serverPort;
     }
 
-    public void setServerPorts(List<Integer> serverPorts) {
-        this.serverPorts = serverPorts;
+    public void setServerPort(int serverPort) {
+        this.serverPort = serverPort;
     }
 
     public HashMap<Integer, Integer> getPortMap() {
