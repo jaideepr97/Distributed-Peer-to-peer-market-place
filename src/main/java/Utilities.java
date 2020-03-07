@@ -98,7 +98,9 @@ public class Utilities {
                 break;
 
 
-            /* TEST CASE 1: 6 PEERS - TESTING ON EDLAB */
+
+
+                /* TEST CASE 1: 6 PEERS - TESTING ON EDLAB */
             case 2:
                 portMap = new HashMap<>();
                 portMap.put(1, 5000);
@@ -170,6 +172,8 @@ public class Utilities {
                 configList.add(config);
                 fileName = "Test_1_EDLAB";
                 break;
+
+
 
 
             /* TEST CASE 2: 7 PEERS - TESTING LOCALLY */
@@ -257,6 +261,8 @@ public class Utilities {
                 break;
 
 
+
+
             /* TEST CASE 2: 7 PEERS - TESTING ON EDLAB */
             case 4:
                 portMap = new HashMap<>();
@@ -340,6 +346,8 @@ public class Utilities {
                 configList.add(config);
                 fileName = "Test_2_EDLAB";
                 break;
+
+
 
 
             /* TEST CASE 3: 8 PEERS - TESTING LOCALLY */
@@ -439,6 +447,8 @@ public class Utilities {
 
 
 
+
+
             /* TEST CASE 3: 8 PEERS - TESTING ON EDLAB */
             case 6:
                 portMap = new HashMap<>();
@@ -532,6 +542,272 @@ public class Utilities {
                         7);
                 configList.add(config);
                 fileName = "Test_3_EDLAB";
+                break;
+
+
+
+            /* TEST CASE 4: 7 PEERS - TESTING ON EDLAB */
+            case 7:
+                portMap = new HashMap<>();
+                portMap.put(1, 5000);
+                portMap.put(2, 5001);
+                portMap.put(3, 5002);
+                portMap.put(4, 5003);
+                portMap.put(5, 5004);
+                portMap.put(6, 5005);
+                portMap.put(7, 5006);
+
+                locationMap = new HashMap<>();
+                locationMap.put(5000,1);
+                locationMap.put(5001,1);
+                locationMap.put(5002,2);
+                locationMap.put(5003,2);
+                locationMap.put(5004,3);
+                locationMap.put(5005,3);
+                locationMap.put(5006,7);
+
+                // 1
+                config = new Config(1,
+                        5000,
+                        new ArrayList<Integer>(Arrays.asList(5001)),
+                        new ArrayList<Integer>( Arrays.asList(2)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        1);
+                configList.add(config);
+                // 2
+                config = new Config(2,
+                        5001,
+                        new ArrayList<Integer>(Arrays.asList(5000, 5002)),
+                        new ArrayList<Integer>( Arrays.asList(1,3)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        1);
+                configList.add(config);
+                //3
+                config = new Config(3,
+                        5002,
+                        new ArrayList<Integer>(Arrays.asList(5001, 5003)),
+                        new ArrayList<Integer>( Arrays.asList(2,4)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        2);
+                configList.add(config);
+                //4
+                config = new Config(4,
+                        5003,
+                        new ArrayList<Integer>(Arrays.asList(5002,5004)),
+                        new ArrayList<Integer>( Arrays.asList(3,5)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        2);
+                configList.add(config);
+                //5
+                config = new Config(5,
+                        5004,
+                        new ArrayList<Integer>(Arrays.asList(5003,5005)),
+                        new ArrayList<Integer>( Arrays.asList(4,6)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        3);
+                configList.add(config);
+                //6
+                config = new Config(6,
+                        5005,
+                        new ArrayList<Integer>(Arrays.asList(5004,5006)),
+                        new ArrayList<Integer>( Arrays.asList(5,7)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        3);
+                configList.add(config);
+                //7
+                config = new Config(7,
+                        5006,
+                        new ArrayList<Integer>(Arrays.asList(5005)),
+                        new ArrayList<Integer>( Arrays.asList(6)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        7);
+                configList.add(config);
+
+                fileName = "Test_4_EDLAB";
+                break;
+
+
+
+
+            /* TEST CASE 5: 8 PEERS - TESTING ON EDLAB */
+            case 8:
+                portMap = new HashMap<>();
+                portMap.put(1, 5000);
+                portMap.put(2, 5001);
+                portMap.put(3, 5002);
+                portMap.put(4, 5003);
+                portMap.put(5, 5004);
+                portMap.put(6, 5005);
+                portMap.put(7, 5006);
+                portMap.put(8, 5007);
+                locationMap = new HashMap<>();
+                locationMap.put(5000,1);
+                locationMap.put(5001,1);
+                locationMap.put(5002,2);
+                locationMap.put(5003,3);
+                locationMap.put(5004,3);
+                locationMap.put(5005,2);
+                locationMap.put(5006,7);
+                locationMap.put(5007,7);
+                // 1
+                config = new Config(1,
+                        5000,
+                        new ArrayList<Integer>(Arrays.asList(5001,5002)),
+                        new ArrayList<Integer>( Arrays.asList(2,3)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        1);
+                configList.add(config);
+                // 2
+                config = new Config(2,
+                        5001,
+                        new ArrayList<Integer>(Arrays.asList(5000,5003,5004)),
+                        new ArrayList<Integer>( Arrays.asList(1,4,5)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        1);
+                configList.add(config);
+                //3
+                config = new Config(3,
+                        5002,
+                        new ArrayList<Integer>(Arrays.asList(5000,5005, 5006)),
+                        new ArrayList<Integer>( Arrays.asList(1,6,7)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        2);
+                configList.add(config);
+                //4
+                config = new Config(4,
+                        5003,
+                        new ArrayList<Integer>(Arrays.asList(5001)),
+                        new ArrayList<Integer>( Arrays.asList(2)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        3);
+                configList.add(config);
+                //5
+                config = new Config(5,
+                        5004,
+                        new ArrayList<Integer>(Arrays.asList(5001)),
+                        new ArrayList<Integer>( Arrays.asList(2)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        3);
+                configList.add(config);
+                //6
+                config = new Config(6,
+                        5005,
+                        new ArrayList<Integer>(Arrays.asList(5002)),
+                        new ArrayList<Integer>( Arrays.asList(3)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        2);
+                configList.add(config);
+                //7
+                config = new Config(7,
+                        5006,
+                        new ArrayList<Integer>(Arrays.asList(5002,5007)),
+                        new ArrayList<Integer>( Arrays.asList(3,8)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        7);
+                configList.add(config);
+                //8
+                config = new Config(8,
+                        5007,
+                        new ArrayList<Integer>(Arrays.asList(5006)),
+                        new ArrayList<Integer>( Arrays.asList(7)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        7);
+                configList.add(config);
+                fileName = "Test_5_EDLAB";
+                break;
+
+
+
+
+            /* TEST CASE 6: 6 PEERS - TESTING ON EDLAB */
+            case 9:
+                portMap = new HashMap<>();
+                portMap.put(1, 5000);
+                portMap.put(2, 5001);
+                portMap.put(3, 5002);
+                portMap.put(4, 5003);
+                portMap.put(5, 5004);
+                portMap.put(6, 5005);
+
+                locationMap = new HashMap<>();
+                locationMap.put(5000,1);
+                locationMap.put(5001,1);
+                locationMap.put(5002,2);
+                locationMap.put(5003,7);
+                locationMap.put(5004,3);
+                locationMap.put(5005,7);
+
+                // 1
+                config = new Config(1,
+                        5000,
+                        new ArrayList<Integer>(Arrays.asList(5001,5002)),
+                        new ArrayList<Integer>( Arrays.asList(2,3)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        1);
+                configList.add(config);
+                // 2
+                config = new Config(2,
+                        5001,
+                        new ArrayList<Integer>(Arrays.asList(5000,5002)),
+                        new ArrayList<Integer>( Arrays.asList(1,3)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        1);
+                configList.add(config);
+                //3
+                config = new Config(3,
+                        5002,
+                        new ArrayList<Integer>(Arrays.asList(5000,5001,5003,5004)),
+                        new ArrayList<Integer>( Arrays.asList(1,2,4,5)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        2);
+                configList.add(config);
+                //4
+                config = new Config(4,
+                        5003,
+                        new ArrayList<Integer>(Arrays.asList(5002,5004,5005)),
+                        new ArrayList<Integer>( Arrays.asList(3,5,6)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        7);
+                configList.add(config);
+                //5
+                config = new Config(5,
+                        5004,
+                        new ArrayList<Integer>(Arrays.asList(5002,5003,5005)),
+                        new ArrayList<Integer>( Arrays.asList(3,4,6)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        3);
+                configList.add(config);
+                //6
+                config = new Config(6,
+                        5005,
+                        new ArrayList<Integer>(Arrays.asList(5003,5004)),
+                        new ArrayList<Integer>( Arrays.asList(4,5)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        7);
+                configList.add(config);
+
+                fileName = "Test_6_EDLAB";
                 break;
 
 
