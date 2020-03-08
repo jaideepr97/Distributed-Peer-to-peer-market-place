@@ -1305,10 +1305,105 @@ public class Utilities {
                 configList.add(config);
                 fileName = "Test_9_local";
                 break;
-
-
-
-
+            case 13:
+                portMap = new HashMap<>();
+                portMap.put(1, 5000);
+                portMap.put(2, 5001);
+                portMap.put(3, 5002);
+                portMap.put(4, 5003);
+                portMap.put(5, 5004);
+                portMap.put(6, 5005);
+                portMap.put(7, 5006);
+                portMap.put(8, 5007);
+                portMap.put(9, 5008);
+                locationMap = new HashMap<>();
+                for(int i=0; i<=8; i++)
+                {
+                    locationMap.put(5000+i, 0);
+                }
+                //1
+                config = new Config(1,
+                        5000,
+                        new ArrayList<Integer>(Arrays.asList(5004)),
+                        new ArrayList<Integer>( Arrays.asList(5)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                //2
+                config = new Config(2,
+                        5001,
+                        new ArrayList<Integer>(Arrays.asList(5004)),
+                        new ArrayList<Integer>( Arrays.asList(5)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                //3
+                config = new Config(3,
+                        5002,
+                        new ArrayList<Integer>(Arrays.asList(5004)),
+                        new ArrayList<Integer>( Arrays.asList(5)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                //4
+                config = new Config(4,
+                        5003,
+                        new ArrayList<Integer>(Arrays.asList(5004)),
+                        new ArrayList<Integer>( Arrays.asList(5)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                //5
+                config = new Config(5,
+                        5004,
+                        new ArrayList<Integer>(Arrays.asList(5000,5001,5002,5003,5005,5006,5007,5008)),
+                        new ArrayList<Integer>( Arrays.asList(1,2,3,4,6,7,8,9)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                //6
+                config = new Config(6,
+                        5005,
+                        new ArrayList<Integer>(Arrays.asList(5004)),
+                        new ArrayList<Integer>( Arrays.asList(5)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                //7
+                config = new Config(7,
+                        5006,
+                        new ArrayList<Integer>(Arrays.asList(5004)),
+                        new ArrayList<Integer>( Arrays.asList(5)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                //8
+                config = new Config(8,
+                        5007,
+                        new ArrayList<Integer>(Arrays.asList(5004)),
+                        new ArrayList<Integer>( Arrays.asList(5)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                //9
+                config = new Config(9,
+                        5008,
+                        new ArrayList<Integer>(Arrays.asList(5004)),
+                        new ArrayList<Integer>( Arrays.asList(5)),
+                        new HashMap<>(portMap),
+                        new HashMap<>(locationMap),
+                        0);
+                configList.add(config);
+                fileName = "Test_10_local";
+                break;
 //            case 3:
 //                portMap = new HashMap<>();
 //                portMap.put(1, 5002);
